@@ -1,0 +1,2645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小学生智能学习平台 - 沪教版同步题库（完整版）</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { 
+  --primary: #5B7CF9; 
+  --success: #52C41A; 
+  --danger: #FF4D4F; 
+  --bg: #F5F7FA; 
+  --card: #FFFFFF;
+  --text-primary: #1f2937;
+  --text-secondary: #6B7280;
+  --border-radius: 16px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-hover: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+/* 基础响应式设置 */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; 
+  background: var(--bg); 
+  min-height: 100vh;
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* 登录页面 */
+.login-container { 
+  position: fixed; 
+  inset: 0; 
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 1000;
+  padding: 20px;
+}
+
+.login-box { 
+  background: rgba(255,255,255,0.95); 
+  border-radius: 24px; 
+  padding: clamp(24px, 5vw, 40px); 
+  width: 100%;
+  max-width: 420px; 
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.login-box h1 { 
+  text-align: center; 
+  color: var(--primary); 
+  margin-bottom: 10px; 
+  font-size: clamp(20px, 4vw, 24px); 
+}
+
+.input-group { 
+  margin-bottom: clamp(16px, 3vw, 20px); 
+}
+
+.input-group label { 
+  display: block; 
+  margin-bottom: 8px; 
+  font-size: 14px; 
+  font-weight: 500; 
+  color: var(--text-secondary);
+}
+
+.input-group input { 
+  width: 100%; 
+  padding: clamp(12px, 3vw, 14px) clamp(16px, 4vw, 18px); 
+  border: 2px solid #E5E7EB; 
+  border-radius: 12px; 
+  font-size: 16px;
+  transition: all 0.3s;
+  -webkit-appearance: none;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(91,124,249,0.1);
+}
+
+.btn { 
+  width: 100%; 
+  padding: clamp(12px, 3vw, 14px); 
+  border: none; 
+  border-radius: 12px; 
+  font-size: clamp(15px, 3vw, 16px); 
+  font-weight: 600; 
+  cursor: pointer; 
+  margin-top: 12px; 
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.btn-primary { 
+  background: var(--primary); 
+  color: white; 
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.btn-outline { 
+  background: transparent; 
+  color: var(--primary); 
+  border: 2px solid var(--primary); 
+}
+
+.btn-secondary { 
+  background: #6B7280; 
+  color: white; 
+  width: auto; 
+  padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 16px); 
+  margin-right: 8px; 
+  font-size: clamp(13px, 2.5vw, 14px); 
+}
+
+.btn-refresh { 
+  background: var(--success); 
+  color: white; 
+  width: auto; 
+  padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 16px); 
+  margin-left: 8px; 
+}
+
+/* 主应用容器 */
+.app-container { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: clamp(12px, 3vw, 20px); 
+  display: none; 
+}
+
+/* 顶部导航 */
+.top-nav { 
+  background: var(--card); 
+  border-radius: var(--border-radius); 
+  padding: clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px); 
+  margin-bottom: clamp(16px, 4vw, 24px); 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  box-shadow: var(--shadow);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nav-left { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+}
+
+.nav-right { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
+
+/* 模块网格 */
+.module-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); 
+  gap: clamp(16px, 4vw, 24px); 
+  margin-bottom: clamp(24px, 5vw, 32px); 
+}
+
+.module-card { 
+  background: var(--card); 
+  border-radius: 20px; 
+  padding: clamp(20px, 4vw, 24px); 
+  box-shadow: var(--shadow); 
+  cursor: pointer; 
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.module-card:hover, .module-card:active { 
+  transform: translateY(-4px); 
+  box-shadow: var(--shadow-hover); 
+}
+
+.module-icon { 
+  width: clamp(50px, 10vw, 60px); 
+  height: clamp(50px, 10vw, 60px); 
+  border-radius: 16px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: clamp(24px, 5vw, 28px); 
+  margin-bottom: 16px; 
+  background: #E0E7FF; 
+}
+
+.module-stats { 
+  display: flex; 
+  gap: clamp(12px, 3vw, 16px); 
+  margin-top: 16px; 
+  padding-top: 16px; 
+  border-top: 1px solid #E5E7EB; 
+}
+
+.stat { 
+  text-align: center; 
+  flex: 1; 
+}
+
+.stat-value { 
+  font-size: clamp(18px, 4vw, 20px); 
+  font-weight: 700; 
+  color: var(--primary); 
+}
+
+/* 标签容器 */
+.tab-container { 
+  background: var(--card); 
+  border-radius: var(--border-radius); 
+  padding: clamp(16px, 4vw, 24px); 
+  box-shadow: var(--shadow); 
+  margin-bottom: clamp(16px, 4vw, 24px); 
+  display: none; 
+}
+
+.tabs { 
+  display: flex; 
+  gap: 8px; 
+  margin-bottom: 20px; 
+  flex-wrap: wrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab { 
+  padding: clamp(8px, 2vw, 10px) clamp(16px, 3vw, 20px); 
+  border: none; 
+  background: transparent; 
+  color: var(--text-secondary); 
+  font-size: clamp(14px, 3vw, 15px); 
+  font-weight: 500; 
+  cursor: pointer; 
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab.active { 
+  color: var(--primary); 
+  background: rgba(91,124,249,0.1); 
+}
+
+.semester-tabs { 
+  display: flex; 
+  gap: 8px; 
+  margin-bottom: 20px; 
+  justify-content: center; 
+  flex-wrap: wrap;
+}
+
+.semester-btn { 
+  padding: clamp(8px, 2vw, 10px) clamp(20px, 4vw, 30px); 
+  border: 2px solid #E5E7EB; 
+  background: white; 
+  border-radius: 20px; 
+  cursor: pointer; 
+  font-weight: 600;
+  font-size: clamp(14px, 3vw, 16px);
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.semester-btn.active { 
+  border-color: var(--primary); 
+  background: var(--primary); 
+  color: white; 
+}
+
+/* 单元网格 */
+.unit-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 130px), 1fr)); 
+  gap: clamp(10px, 2vw, 12px); 
+  margin: 20px 0; 
+}
+
+.unit-card { 
+  padding: clamp(14px, 3vw, 16px); 
+  border: 2px solid #E5E7EB; 
+  border-radius: 12px; 
+  text-align: center; 
+  cursor: pointer; 
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  background: white;
+}
+
+.unit-card:hover, .unit-card:active { 
+  border-color: var(--primary); 
+  background: rgba(91,124,249,0.05); 
+}
+
+.unit-card.active { 
+  border-color: var(--primary); 
+  background: var(--primary); 
+  color: white; 
+}
+
+/* 挑战信息 */
+.challenge-info { 
+  text-align: center; 
+  margin: 20px 0; 
+  padding: clamp(16px, 4vw, 20px); 
+  background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%); 
+  border-radius: var(--border-radius); 
+}
+
+.bank-info { 
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+  color: white; 
+  padding: clamp(14px, 3vw, 16px); 
+  border-radius: 12px; 
+  margin-bottom: 20px; 
+  text-align: center; 
+  font-size: clamp(13px, 2.5vw, 14px);
+}
+
+.start-challenge-btn { 
+  background: var(--primary); 
+  color: white; 
+  border: none; 
+  padding: clamp(14px, 3vw, 16px) clamp(32px, 6vw, 48px); 
+  border-radius: 12px; 
+  font-size: clamp(16px, 4vw, 18px); 
+  font-weight: 600; 
+  cursor: pointer; 
+  margin-top: 20px;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.start-challenge-btn:active {
+  transform: scale(0.98);
+}
+
+/* 模态框 */
+.modal { 
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0,0,0,0.6); 
+  display: none; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 999; 
+  padding: clamp(12px, 4vw, 20px);
+  backdrop-filter: blur(4px);
+}
+
+.modal.show { 
+  display: flex; 
+}
+
+.modal-content { 
+  background: var(--card); 
+  border-radius: 24px; 
+  width: 100%;
+  max-width: 700px; 
+  max-height: 90vh; 
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  animation: modalSlideUp 0.3s ease;
+}
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(50px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header { 
+  padding: clamp(16px, 4vw, 24px); 
+  border-bottom: 1px solid #E5E7EB; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.modal-close { 
+  width: 36px; 
+  height: 36px; 
+  border-radius: 50%; 
+  border: none; 
+  background: #F5F7FA; 
+  cursor: pointer; 
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modal-close:active {
+  background: #e5e7eb;
+}
+
+.quiz-container { 
+  padding: clamp(16px, 4vw, 24px); 
+}
+
+.question-box { 
+  background: #F5F7FA; 
+  padding: clamp(16px, 4vw, 24px); 
+  border-radius: var(--border-radius); 
+  margin-bottom: 20px; 
+}
+
+.question-title { 
+  font-size: clamp(16px, 4vw, 18px); 
+  font-weight: 600; 
+  margin-bottom: 20px; 
+  line-height: 1.6; 
+}
+
+.options { 
+  display: flex; 
+  flex-direction: column; 
+  gap: clamp(10px, 2vw, 12px); 
+}
+
+.option { 
+  padding: clamp(14px, 3vw, 16px); 
+  background: white; 
+  border: 2px solid #E5E7EB; 
+  border-radius: 12px; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+  font-size: clamp(14px, 3vw, 16px);
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.option:hover, .option:active { 
+  border-color: var(--primary); 
+  background: rgba(91,124,249,0.02);
+}
+
+.option.correct { 
+  border-color: var(--success); 
+  background: rgba(82,196,26,0.05); 
+}
+
+.option.wrong { 
+  border-color: var(--danger); 
+  background: rgba(255,77,79,0.05); 
+}
+
+.option-label { 
+  width: 32px; 
+  height: 32px; 
+  border-radius: 50%; 
+  background: #F5F7FA; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.feedback { 
+  margin-top: 20px; 
+  padding: clamp(14px, 3vw, 16px); 
+  border-radius: 12px; 
+  display: none;
+  font-size: clamp(14px, 3vw, 15px);
+}
+
+.feedback.show { 
+  display: block; 
+}
+
+.feedback.correct { 
+  background: rgba(82,196,26,0.1); 
+  color: var(--success); 
+  border-left: 4px solid var(--success); 
+}
+
+.feedback.wrong { 
+  background: rgba(255,77,79,0.1); 
+  color: var(--danger); 
+  border-left: 4px solid var(--danger); 
+}
+
+.next-btn { 
+  background: var(--primary); 
+  color: white; 
+  border: none; 
+  padding: clamp(12px, 3vw, 14px) clamp(24px, 5vw, 32px); 
+  border-radius: 10px; 
+  font-size: clamp(15px, 3vw, 16px); 
+  cursor: pointer; 
+  margin-top: 20px; 
+  display: none;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.next-btn:active {
+  transform: scale(0.98);
+}
+
+/* 阅读文章 */
+.reading-passage { 
+  background: #F0F7FF; 
+  padding: clamp(16px, 4vw, 20px); 
+  border-radius: 12px; 
+  margin-bottom: 20px; 
+  border-left: 4px solid var(--primary); 
+}
+
+.reading-title { 
+  font-weight: 700; 
+  color: var(--primary); 
+  margin-bottom: 12px; 
+  font-size: clamp(16px, 4vw, 18px); 
+}
+
+.reading-text { 
+  line-height: 1.8; 
+  color: #374151;
+  font-size: clamp(14px, 3vw, 16px);
+}
+
+/* 英语跟读 */
+.speak-mode-tabs { 
+  display: flex; 
+  gap: 8px; 
+  margin-bottom: 20px; 
+  justify-content: center; 
+  flex-wrap: wrap;
+}
+
+.speak-mode-btn { 
+  padding: clamp(8px, 2vw, 10px) clamp(16px, 4vw, 20px); 
+  border: 2px solid #E5E7EB; 
+  background: white; 
+  border-radius: 20px; 
+  cursor: pointer; 
+  font-size: clamp(13px, 2.5vw, 14px);
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.speak-mode-btn.active { 
+  border-color: var(--primary); 
+  background: var(--primary); 
+  color: white; 
+}
+
+.speak-container { 
+  max-width: 600px; 
+  margin: 0 auto; 
+  text-align: center; 
+}
+
+.sentence-box { 
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+  color: white; 
+  padding: clamp(24px, 6vw, 40px); 
+  border-radius: 20px; 
+  margin-bottom: 32px;
+  word-break: break-word;
+}
+
+.sentence-text { 
+  font-size: clamp(20px, 5vw, 24px); 
+  font-weight: 600; 
+  margin-bottom: 8px; 
+}
+
+.controls { 
+  display: flex; 
+  justify-content: center; 
+  gap: clamp(16px, 4vw, 20px); 
+  margin-bottom: 32px; 
+}
+
+.control-btn { 
+  width: clamp(56px, 12vw, 60px); 
+  height: clamp(56px, 12vw, 60px); 
+  border-radius: 50%; 
+  border: none; 
+  background: var(--card); 
+  box-shadow: var(--shadow); 
+  cursor: pointer; 
+  font-size: clamp(20px, 5vw, 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.control-btn:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-hover);
+}
+
+.control-btn.record { 
+  width: clamp(72px, 15vw, 80px); 
+  height: clamp(72px, 15vw, 80px); 
+  background: var(--danger); 
+  color: white; 
+  font-size: clamp(28px, 6vw, 32px); 
+}
+
+.control-btn.record.recording {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.stars { 
+  display: flex; 
+  justify-content: center; 
+  gap: clamp(12px, 3vw, 16px); 
+  margin: 20px 0; 
+}
+
+.star { 
+  font-size: clamp(40px, 10vw, 48px); 
+  color: #E5E7EB; 
+  transition: all 0.3s;
+}
+
+.star.active { 
+  color: #FBBF24; 
+  animation: starPop 0.5s ease;
+}
+
+@keyframes starPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.word-progress { 
+  margin-top: 20px; 
+  padding: clamp(14px, 3vw, 16px); 
+  background: white; 
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.progress-bar { 
+  height: 8px; 
+  background: #E5E7EB; 
+  border-radius: 4px; 
+  margin-top: 8px; 
+  overflow: hidden; 
+}
+
+.progress-fill { 
+  height: 100%; 
+  background: var(--success); 
+  border-radius: 4px; 
+  transition: width 0.3s; 
+}
+
+/* 错题本 */
+.wrongbook-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 24px; 
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-btn { 
+  padding: clamp(8px, 2vw, 10px) clamp(14px, 3vw, 16px); 
+  border: 1px solid #E5E7EB; 
+  background: white; 
+  border-radius: 8px; 
+  cursor: pointer;
+  font-size: clamp(13px, 2.5vw, 14px);
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-btn.active { 
+  background: var(--primary); 
+  color: white; 
+  border-color: var(--primary); 
+}
+
+.wrong-list { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+}
+
+.wrong-item { 
+  background: #F5F7FA; 
+  border-radius: 16px; 
+  padding: clamp(16px, 4vw, 20px); 
+  border-left: 4px solid var(--danger);
+  word-break: break-word;
+}
+
+.empty-state { 
+  text-align: center; 
+  padding: clamp(40px, 10vw, 60px); 
+  color: var(--text-secondary);
+  font-size: clamp(14px, 3vw, 16px);
+}
+
+/* 结果模态框 */
+.result-modal .modal-content { 
+  text-align: center; 
+  padding: clamp(24px, 6vw, 40px); 
+}
+
+.result-score { 
+  font-size: clamp(48px, 12vw, 64px); 
+  font-weight: 800; 
+  color: var(--primary);
+  line-height: 1;
+}
+
+.result-stats { 
+  display: flex; 
+  justify-content: center; 
+  gap: clamp(20px, 5vw, 32px); 
+  margin: clamp(24px, 6vw, 32px) 0;
+  flex-wrap: wrap;
+}
+
+.result-stat { 
+  text-align: center; 
+}
+
+.result-stat-value { 
+  font-size: clamp(24px, 6vw, 28px); 
+  font-weight: 700; 
+  color: var(--primary); 
+}
+
+/* 响应式断点优化 */
+@media (max-width: 768px) {
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .unit-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .wrongbook-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .challenge-info {
+    padding: 16px;
+  }
+
+  .bank-info div {
+    flex-direction: column;
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .unit-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tabs {
+    gap: 6px;
+  }
+
+  .tab {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .semester-btn {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+
+  .result-stats {
+    gap: 16px;
+  }
+
+  .controls {
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-container {
+    padding: 40px;
+  }
+
+  .module-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 横屏优化 */
+@media (max-height: 600px) and (orientation: landscape) {
+  .login-container {
+    padding: 10px;
+  }
+
+  .login-box {
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+
+  .modal-content {
+    max-height: 95vh;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+  }
+
+  .input-group input {
+    background: #334155;
+    border-color: #475569;
+    color: white;
+  }
+
+  .option {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  .question-box, .wrong-item {
+    background: #334155;
+  }
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="login-container" id="loginPage">
+  <div class="login-box">
+    <h1>🎓 小学生智能学习平台</h1>
+    <div style="text-align: center; color: #6B7280; margin-bottom: 20px; font-size: 14px;">沪教版同步教材（1-5年级上下册）</div>
+    <div class="input-group">
+      <label>用户名</label>
+      <input type="text" id="username" placeholder="请输入用户名">
+    </div>
+    <div class="input-group">
+      <label>密码</label>
+      <input type="password" id="password" placeholder="请输入密码">
+    </div>
+    <button class="btn btn-primary" onclick="login()">登录</button>
+    <button class="btn btn-outline" onclick="register()">注册新账号</button>
+    <div id="errorTip" style="color: var(--danger); text-align: center; margin-top: 12px;"></div>
+  </div>
+</div>
+
+<div class="app-container" id="mainApp">
+  <div class="top-nav">
+    <div class="nav-left">
+      <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #667eea); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;" id="avatar">学</div>
+      <div>
+        <div style="font-weight: 600;" id="userDisplay">学员</div>
+        <div style="font-size: 12px; color: #6B7280;">沪教版同步学习系统</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="btn btn-outline" onclick="logout()" style="width: auto; padding: 8px 16px; margin: 0;">退出</button>
+    </div>
+  </div>
+
+  <div class="module-grid" id="moduleSelect">
+    <div class="module-card" onclick="showModule('challenge')">
+      <div class="module-icon">🎯</div>
+      <h3>闯关训练</h3>
+      <p>沪教版1-5年级同步教材<br>按学期单元闯关，含详细题目</p>
+      <div class="module-stats">
+        <div class="stat"><div class="stat-value" id="statChallenge">0</div><div style="font-size: 12px; color: #6B7280;">已完成</div></div>
+        <div class="stat"><div class="stat-value" id="statStars">0</div><div style="font-size: 12px; color: #6B7280;">获得星星</div></div>
+      </div>
+    </div>
+    <div class="module-card" onclick="showModule('speak')">
+      <div class="module-icon" style="background: #D1FAE5;">🎙️</div>
+      <h3>英语跟读</h3>
+      <p>单词+句子双模式跟读<br>智能语音识别评分</p>
+      <div class="module-stats">
+        <div class="stat"><div class="stat-value" id="statSpeak">0</div><div style="font-size: 12px; color: #6B7280;">跟读次数</div></div>
+        <div class="stat"><div class="stat-value" id="statAccuracy">0%</div><div style="font-size: 12px; color: #6B7280;">平均准确度</div></div>
+      </div>
+    </div>
+    <div class="module-card" onclick="showModule('wrongbook')">
+      <div class="module-icon" style="background: #FEE2E2;">📚</div>
+      <h3>智能错题本</h3>
+      <p>自动记录各科各年级错题<br>针对性复习，查漏补缺</p>
+      <div class="module-stats">
+        <div class="stat"><div class="stat-value" id="statWrong">0</div><div style="font-size: 12px; color: #6B7280;">错题数</div></div>
+        <div class="stat"><div class="stat-value" id="statReview">0</div><div style="font-size: 12px; color: #6B7280;">已复习</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-container" id="challengeModule">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h3>🎯 闯关训练</h3>
+      <button class="btn btn-secondary" onclick="goBack()">← 返回首页</button>
+    </div>
+    <div class="bank-info">
+      <h4>📚 沪教版同步教材详细题库</h4>
+      <div style="display: flex; justify-content: center; gap: 24px; font-size: 14px; margin-top: 8px;">
+        <span>语文：具体拼音、词语、阅读题</span>
+        <span>数学：计算题、应用题</span>
+        <span>英语：单词、语法、阅读理解</span>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="setGrade(1)">一年级</button>
+      <button class="tab" onclick="setGrade(2)">二年级</button>
+      <button class="tab" onclick="setGrade(3)">三年级</button>
+      <button class="tab" onclick="setGrade(4)">四年级</button>
+      <button class="tab" onclick="setGrade(5)">五年级</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="setSubject('yuwen')">语文</button>
+      <button class="tab" onclick="setSubject('shuxue')">数学</button>
+      <button class="tab" onclick="setSubject('yingyu')">英语</button>
+    </div>
+    <div class="semester-tabs">
+      <button class="semester-btn active" onclick="setSemester(1)">📗 上学期</button>
+      <button class="semester-btn" onclick="setSemester(2)">📘 下学期</button>
+    </div>
+    <div style="margin: 20px 0;">
+      <h4 style="margin-bottom: 12px; color: #374151;">选择单元闯关：</h4>
+      <div class="unit-grid" id="unitGrid"></div>
+    </div>
+    <div class="challenge-info" id="challengeInfo" style="display: none;">
+      <h3 id="challengeTitle">一年级语文上学期 - Unit 1</h3>
+      <p style="color: #6B7280; margin: 8px 0;">共10题，包含具体选项和解析 | 本单元题库：<span id="bankCount">10+</span>题</p>
+      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px;">
+        <button class="start-challenge-btn" onclick="startChallenge()">开始闯关</button>
+        <button class="btn btn-refresh" onclick="refreshBank()" style="margin-top: 20px; height: 54px;">🔄 换一批题</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-container" id="speakModule">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h3>🎙️ 英语跟读</h3>
+      <button class="btn btn-secondary" onclick="goBack()">← 返回首页</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="setSpeakGrade(1)">一年级</button>
+      <button class="tab" onclick="setSpeakGrade(2)">二年级</button>
+      <button class="tab" onclick="setSpeakGrade(3)">三年级</button>
+      <button class="tab" onclick="setSpeakGrade(4)">四年级</button>
+      <button class="tab" onclick="setSpeakGrade(5)">五年级</button>
+    </div>
+    <div class="semester-tabs">
+      <button class="semester-btn active" onclick="setSpeakSemester(1)">📗 上学期</button>
+      <button class="semester-btn" onclick="setSpeakSemester(2)">📘 下学期</button>
+    </div>
+    <div class="speak-mode-tabs">
+      <button class="speak-mode-btn active" onclick="setSpeakMode('word')">🔤 单词跟读</button>
+      <button class="speak-mode-btn" onclick="setSpeakMode('sentence')">💬 句子跟读</button>
+    </div>
+    <div style="margin: 20px 0;">
+      <h4 style="margin-bottom: 12px; color: #374151;">选择单元：</h4>
+      <div class="unit-grid" id="speakUnitGrid"></div>
+    </div>
+    <div class="speak-container" id="speakPractice" style="display: none;">
+      <div class="word-progress">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span id="progressLabel">学习进度</span>
+          <span id="wordProgress">1 / 10</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 10%;"></div>
+        </div>
+      </div>
+      <div class="sentence-box" style="margin-top: 20px;">
+        <div class="sentence-text" id="speakText">apple</div>
+        <div style="font-size: 14px; opacity: 0.9;" id="speakPhonetic">/ˈæpl/</div>
+        <div style="font-size: 16px; margin-top: 8px; opacity: 0.9;" id="speakMeaning">苹果</div>
+      </div>
+      <div class="controls">
+        <button class="control-btn" onclick="playSpeak()">🔊</button>
+        <button class="control-btn record" id="recordBtn" onclick="toggleRecord()">🎤</button>
+        <button class="control-btn" onclick="nextSpeak()">⏭️</button>
+      </div>
+      <div class="stars" id="starContainer">
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+      </div>
+      <div id="ratingText" style="color: #6B7280; margin-top: 16px;">点击录音按钮开始跟读</div>
+    </div>
+  </div>
+
+  <div class="tab-container" id="wrongbookModule">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h3>📚 智能错题本</h3>
+      <button class="btn btn-secondary" onclick="goBack()">← 返回首页</button>
+    </div>
+    <div class="wrongbook-header">
+      <h3>我的错题记录</h3>
+      <div>
+        <button class="filter-btn active" onclick="filterWrong('all')">全部</button>
+        <button class="filter-btn" onclick="filterWrong('yuwen')">语文</button>
+        <button class="filter-btn" onclick="filterWrong('shuxue')">数学</button>
+        <button class="filter-btn" onclick="filterWrong('yingyu')">英语</button>
+      </div>
+    </div>
+    <div class="wrong-list" id="wrongList">
+      <div class="empty-state">暂无错题，继续保持！🎉</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="quizModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>📝 闯关答题中</h3>
+      <button class="modal-close" onclick="closeQuiz()">✕</button>
+    </div>
+    <div class="quiz-container" id="quizContainer"></div>
+  </div>
+</div>
+
+<div class="modal result-modal" id="resultModal">
+  <div class="modal-content">
+    <div style="font-size: 48px; margin-bottom: 16px;">🏆</div>
+    <div class="result-score" id="finalScore">0</div>
+    <div style="color: #6B7280; margin-bottom: 24px;">分</div>
+    <div class="result-stats">
+      <div class="result-stat">
+        <div class="result-stat-value" id="correctCount">0</div>
+        <div style="font-size: 12px; color: #6B7280;">答对</div>
+      </div>
+      <div class="result-stat">
+        <div class="result-stat-value" id="wrongCount">0</div>
+        <div style="font-size: 12px; color: #6B7280;">答错</div>
+      </div>
+      <div class="result-stat">
+        <div class="result-stat-value" id="accuracyRate">0%</div>
+        <div style="font-size: 12px; color: #6B7280;">正确率</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="closeResult()" style="max-width: 200px; margin: 0 auto;">继续学习</button>
+  </div>
+</div>
+
+<script>
+
+// ==================== 沪教版同步教材结构 ====================
+const textbookStructure = {
+  1: {
+    yuwen: { 1: ['识字一', '汉语拼音', '课文一', '识字二', '课文二', '识字三', '课文三', '总复习'], 2: ['识字一', '课文一', '识字二', '课文二', '识字三', '课文三', '识字四', '总复习'] },
+    shuxue: { 1: ['10以内数的认识', '10以内数的加减法', '20以内数的认识', '20以内数的加减法', '几何小实践', '整理与提高', '综合练习一', '综合练习二'], 2: ['20以内数的加减法', '100以内数的认识', '100以内数的加减法', '几何小实践', '整理与提高', '综合练习一', '综合练习二', '期末复习'] },
+    yingyu: { 1: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 1', 'Review 1', 'Review 2', 'Assessment'], 2: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 2', 'Review 1', 'Review 2', 'Assessment'] }
+  },
+  2: {
+    yuwen: { 1: ['课文一', '识字一', '课文二', '识字二', '课文三', '课文四', '古诗诵读', '综合练习'], 2: ['课文一', '课文二', '课文三', '课文四', '课文五', '古诗诵读', '语文快乐宫', '期末复习'] },
+    shuxue: { 1: ['复习与提高', '乘法除法一', '乘法除法二', '几何小实践', '整理与提高', '综合练习一', '综合练习二', '期中复习'], 2: ['复习与提高', '千以内数的认识', '时间的初步认识', '三位数的加减法', '几何小实践', '整理与提高', '综合练习', '期末复习'] },
+    yingyu: { 1: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 1', 'Review', 'Story time', 'Assessment'], 2: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 2', 'Review', 'Story time', 'Assessment'] }
+  },
+  3: {
+    yuwen: { 1: ['古诗二首', '秋天的故事', '名人故事', '动物世界', '神话传说', '综合练习一', '综合练习二', '期中复习'], 2: ['春天的故事', '寓言故事', '科普世界', '历史人物', '民间故事', '综合练习一', '综合练习二', '期末复习'] },
+    shuxue: { 1: ['复习与提高', '乘除法', '时间的初步认识', '分数的初步认识', '计算器', '几何小实践', '整理与提高', '综合练习'], 2: ['乘除法', '速度时间路程', '分数的初步认识', '计算器', '几何小实践', '整理与提高', '数学广场', '期末复习'] },
+    yingyu: { 1: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 1', 'Review 1', 'Review 2', 'Assessment'], 2: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 2', 'Review 1', 'Review 2', 'Assessment'] }
+  },
+  4: {
+    yuwen: { 1: ['师生情', '爱国情怀', '自然景观', '童话故事', '历史故事', '综合练习一', '综合练习二', '期中复习'], 2: ['春天美景', '人物描写', '科学探索', '传统文化', '人生哲理', '综合练习一', '综合练习二', '期末复习'] },
+    shuxue: { 1: ['复习与提高', '大数的认识', '四则运算', '运算定律', '几何小实践', '整理与提高', '数学广场', '综合练习'], 2: ['小数的认识与加减法', '小数乘除法', '统计', '几何小实践', '整理与提高', '问题解决', '数学广场', '期末复习'] },
+    yingyu: { 1: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 1', 'Review 1', 'Review 2', 'Assessment'], 2: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 2', 'Review 1', 'Review 2', 'Assessment'] }
+  },
+  5: {
+    yuwen: { 1: ['读书有方', '思乡情切', '走进名著', '家国情怀', '自然之美', '综合练习一', '综合练习二', '期中复习'], 2: ['童年往事', '古典名著', '思维火花', '异域风情', '幽默与风趣', '综合练习一', '综合练习二', '期末复习'] },
+    shuxue: { 1: ['小数乘除法', '小数四则混合运算', '平均数', '简易方程', '几何小实践', '整理与提高', '数学广场', '综合练习'], 2: ['正数和负数', '简易方程', '几何小实践', '统计初步', '可能性', '整理与提高', '数学广场', '期末复习'] },
+    yingyu: { 1: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 1', 'Review 1', 'Review 2', 'Assessment'], 2: ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Project 2', 'Review 1', 'Review 2', 'Assessment'] }
+  }
+};
+
+// ==================== 详细题库数据（所有年级）====================
+const detailedQuestionBank = {};
+
+// 生成所有年级的题库
+function generateAllQuestions() {
+  for (let g = 1; g <= 5; g++) {
+    detailedQuestionBank[g] = {};
+    for (let s of ['yuwen', 'shuxue', 'yingyu']) {
+      detailedQuestionBank[g][s] = {};
+      for (let sem = 1; sem <= 2; sem++) {
+        detailedQuestionBank[g][s][sem] = {};
+        for (let u = 1; u <= 8; u++) {
+          detailedQuestionBank[g][s][sem][u] = [];
+
+          // 生成10道题目
+          for (let i = 1; i <= 10; i++) {
+            let q = generateQuestion(g, s, sem, u, i);
+            detailedQuestionBank[g][s][sem][u].push(q);
+          }
+        }
+      }
+    }
+  }
+}
+
+function generateQuestion(grade, subject, semester, unit, num) {
+  const semText = semester === 1 ? '上' : '下';
+  const baseTitle = `${grade}年级${semText}学期Unit${unit}第${num}题`;
+
+  if (subject === 'yuwen') {
+    return generateYuwenQuestion(baseTitle, grade, num);
+  } else if (subject === 'shuxue') {
+    return generateShuxueQuestion(baseTitle, grade, num);
+  } else {
+    return generateYingyuQuestion(baseTitle, grade, num);
+  }
+}
+
+// 随机打乱选项顺序，同时更新正确答案索引
+function shuffleOptions(question) {
+  const options = question.options;
+  const correctAnswer = question.answer;
+  const correctText = options[correctAnswer];
+
+  // 创建索引数组并打乱
+  const indices = [0, 1, 2, 3];
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+
+  // 根据打乱后的索引重新排列选项
+  const shuffledOptions = indices.map(i => options[i]);
+
+  // 找到正确答案的新位置
+  const newAnswer = shuffledOptions.indexOf(correctText);
+
+  return {
+    q: question.q,
+    options: shuffledOptions,
+    answer: newAnswer,
+    analysis: question.analysis
+  };
+}
+
+function generateYuwenQuestion(title, grade, num) {
+  // 根据年级生成不同难度的语文题目
+
+  // ========== 一年级题目 ==========
+  if (grade === 1) {
+    const rawQuestions1 = [
+      {
+        q: `${title}："天"字的正确读音是？`,
+        options: ['tiān', 'tīan', 'tián', 'tìan'],
+        answer: 0,
+        analysis: '"天"读tiān，第一声，注意是前鼻音an，不是ang'
+      },
+      {
+        q: `${title}：选择正确的拼音`,
+        options: ['白云(bái yún)', '白云(bái yún)', '白云(bái yǘ)', '白云(bái yuán)'],
+        answer: 0,
+        analysis: '"云"读yún，第二声，ü遇到y要去掉两点'
+      },
+      {
+        q: `${title}："上"字的笔顺，第三笔是？`,
+        options: ['横', '竖', '横折', '撇'],
+        answer: 0,
+        analysis: '"上"的笔顺：竖、横、横，第三笔是横'
+      },
+      {
+        q: `${title}：选择正确的汉字`,
+        options: ['日', '目', '田', '白'],
+        answer: 0,
+        analysis: '根据图片或语境选择正确的汉字'
+      },
+      {
+        q: `${title}："手"字共有几画？`,
+        options: ['3画', '4画', '5画', '6画'],
+        answer: 1,
+        analysis: '"手"字笔顺：撇、横、横、竖钩，共4画'
+      },
+      {
+        q: `${title}：选择正确的反义词`,
+        options: ['大-小', '大-多', '大-好', '大-上'],
+        answer: 0,
+        analysis: '"大"的反义词是"小"'
+      },
+      {
+        q: `${title}："一"字在"一天"中读？`,
+        options: ['yī', 'yí', 'yì', 'yi'],
+        answer: 0,
+        analysis: '"一"字变调规则：在第一声前读第一声yī'
+      },
+      {
+        q: `${title}：选择正确的词语搭配`,
+        options: ['看书', '看水', '看风', '看太阳'],
+        answer: 0,
+        analysis: '"看书"是正确的词语搭配'
+      },
+      {
+        q: `${title}："山"字的正确笔顺是？`,
+        options: ['竖、竖折、竖', '竖折、竖、竖', '竖、竖、竖折', '竖折、竖、横'],
+        answer: 0,
+        analysis: '"山"字笔顺：竖、竖折、竖'
+      },
+      {
+        q: `${title}：选择正确的句子`,
+        options: ['我是小学生。', '我小学生是。', '小学生我是。', '是我小学生。'],
+        answer: 0,
+        analysis: '正确的语序是：我是小学生。'
+      }
+    ];
+    return shuffleOptions(rawQuestions1[num - 1]);
+  }
+
+  // ========== 二年级题目 ==========
+  else if (grade === 2) {
+    const rawQuestions2 = [
+      {
+        q: `${title}：下列词语中，读音正确的是？`,
+        options: ['漂亮(piào liang)', '漂亮(piào liàng)', '漂亮(piāo liang)', '漂亮(piào láng)'],
+        answer: 0,
+        analysis: '"漂亮"读piào liang，"亮"读轻声'
+      },
+      {
+        q: `${title}："已经"的"已"和"自己"的"己"，区别是？`,
+        options: ['已(yǐ)半口，己(jǐ)满口', '已(yǐ)满口，己(jǐ)半口', '读音相同', '写法相同'],
+        answer: 0,
+        analysis: '"已"字半封口，"己"字全封口，且读音不同'
+      },
+      {
+        q: `${title}：选择正确的量词`,
+        options: ['一匹马', '一头马', '一只马', '一条马'],
+        answer: 0,
+        analysis: '马的量词用"匹"'
+      },
+      {
+        q: `${title}："坐"和"座"的区别是？`,
+        options: ['"坐"是动词，"座"是名词', '"坐"是名词，"座"是动词', '意思相同', '读音不同'],
+        answer: 0,
+        analysis: '"坐"表示动作（坐下），"座"表示座位或量词（一座山）'
+      },
+      {
+        q: `${title}：下列词语中，没有错别字的是？`,
+        options: ['公园', '公圆', '公员', '公院'],
+        answer: 0,
+        analysis: '正确写法是"公园"'
+      },
+      {
+        q: `${title}："兴"在"高兴"中读？`,
+        options: ['xìng', 'xīng', 'xìn', 'xīn'],
+        answer: 0,
+        analysis: '"高兴"中"兴"读xìng（第四声），表示情绪'
+      },
+      {
+        q: `${title}：选择正确的近义词`,
+        options: ['高兴-快乐', '高兴-难过', '高兴-生气', '高兴-伤心'],
+        answer: 0,
+        analysis: '"高兴"和"快乐"是近义词'
+      },
+      {
+        q: `${title}："重"字在"重要"中读？`,
+        options: ['zhòng', 'chóng', 'zhōng', 'chōng'],
+        answer: 0,
+        analysis: '"重要"中"重"读zhòng（第四声）'
+      },
+      {
+        q: `${title}：下列句子中，标点符号使用正确的是？`,
+        options: ['你今天好吗？', '你今天好吗。', '你今天好吗！', '你今天好吗，'],
+        answer: 0,
+        analysis: '疑问句末尾用问号'
+      },
+      {
+        q: `${title}：选择正确的部首`,
+        options: ['河-氵', '河-可', '河-口', '河-女'],
+        answer: 0,
+        analysis: '"河"字的部首是三点水"氵"，与水有关'
+      }
+    ];
+    return shuffleOptions(rawQuestions2[num - 1]);
+  }
+
+  // ========== 三年级题目 ==========
+  else if (grade === 3) {
+    const rawQuestions3 = [
+      {
+        q: `${title}：下列词语中，加点字读音正确的是？`,
+        options: ['假(jiǎ)如', '假(jià)如', '假(jiā)如', '假(jiào)如'],
+        answer: 0,
+        analysis: '"假如"中"假"读jiǎ（第三声），表示假设'
+      },
+      {
+        q: `${title}："的、地、得"用法正确的是？`,
+        options: ['美丽的花朵', '美丽地花朵', '美丽得花朵', '美丽个花朵'],
+        answer: 0,
+        analysis: '"的"用在名词前，"地"用在动词前，"得"用在动词后'
+      },
+      {
+        q: `${title}：选择正确的成语`,
+        options: ['画龙点睛', '画龙点晴', '画蛇添足', '画蛇添脚'],
+        answer: 0,
+        analysis: '正确成语是"画龙点睛"，比喻在关键处点明要旨'
+      },
+      {
+        q: `${title}："舍"在"宿舍"中读？`,
+        options: ['shè', 'shě', 'sè', 'sě'],
+        answer: 0,
+        analysis: '"宿舍"中"舍"读shè（第四声），表示房屋'
+      },
+      {
+        q: `${title}：下列句子没有语病的是？`,
+        options: ['我认真地写作业。', '我写作业认真地。', '认真我地写作业。', '我写作业认真地的。'],
+        answer: 0,
+        analysis: '正确语序：我（主语）认真地（状语）写作业（谓语+宾语）'
+      },
+      {
+        q: `${title}：选择正确的修辞手法`,
+        options: ['小鸟在唱歌。（拟人）', '小鸟在唱歌。（比喻）', '小鸟在唱歌。（夸张）', '小鸟在唱歌。（排比）'],
+        answer: 0,
+        analysis: '把小鸟当作人来写，赋予人的动作"唱歌"，是拟人'
+      },
+      {
+        q: `${title}："参"在"参加"中读？`,
+        options: ['cān', 'cēn', 'cán', 'shēn'],
+        answer: 0,
+        analysis: '"参加"中"参"读cān（第一声）'
+      },
+      {
+        q: `${title}：选择正确的解释`,
+        options: ['"爱不释手"：喜爱得舍不得放下', '"爱不释手"：喜爱得不想洗手', '"爱不释手"：喜爱得不会放手', '"爱不释手"：喜爱得不想离开'],
+        answer: 0,
+        analysis: '"释"是放下的意思，"爱不释手"指喜爱得舍不得放下'
+      },
+      {
+        q: `${title}：下列词语搭配正确的是？`,
+        options: ['提高水平', '提高质量', '增加水平', '增加质量'],
+        answer: 0,
+        analysis: '"提高"常与"水平、质量、效率"等搭配，"增加"常与"数量、人数"搭配'
+      },
+      {
+        q: `${title}：选择正确的诗句`,
+        options: ['春眠不觉晓，处处闻啼鸟。', '春眠不觉晓，处处蚊子咬。', '春眠不觉晓，处处闻花香。', '春眠不觉晓，处处听风声。'],
+        answer: 0,
+        analysis: '原诗出自孟浩然《春晓》：春眠不觉晓，处处闻啼鸟。'
+      }
+    ];
+    return shuffleOptions(rawQuestions3[num - 1]);
+  }
+
+  // ========== 四年级题目 ==========
+  else if (grade === 4) {
+    const rawQuestions4 = [
+      {
+        q: `${title}：下列词语中，读音完全正确的是？`,
+        options: ['倔强(jué jiàng)', '倔强(juè jiàng)', '倔强(jué qiáng)', '倔强(jüé jiàng)'],
+        answer: 0,
+        analysis: '"倔强"读jué jiàng，注意"强"读jiàng，不是qiáng'
+      },
+      {
+        q: `${title}："鼎"字共有多少画？`,
+        options: ['12画', '13画', '11画', '10画'],
+        answer: 0,
+        analysis: '"鼎"字笔顺较复杂，共12画'
+      },
+      {
+        q: `${title}：选择正确的关联词`,
+        options: ['虽然下雨，但是运动会照常举行。', '因为下雨，所以运动会照常举行。', '如果下雨，就运动会照常举行。', '不但下雨，而且运动会照常举行。'],
+        answer: 0,
+        analysis: '前后句是转折关系，用"虽然...但是..."'
+      },
+      {
+        q: `${title}："盛"在"盛情"中读？`,
+        options: ['shèng', 'chéng', 'shéng', 'chèng'],
+        answer: 0,
+        analysis: '"盛情"中"盛"读shèng（第四声），表示深厚'
+      },
+      {
+        q: `${title}：下列句子中，成语使用恰当的是？`,
+        options: ['他学习刻苦，终于名列前茅。', '他学习刻苦，终于名落孙山。', '他学习刻苦，终于滥竽充数。', '他学习刻苦，终于守株待兔。'],
+        answer: 0,
+        analysis: '"名列前茅"指名次靠前，符合语境；"名落孙山"指落榜，不合语境'
+      },
+      {
+        q: `${title}：选择正确的说明方法`,
+        options: ['这座塔高100米。（列数字）', '这座塔高100米。（打比方）', '这座塔高100米。（作比较）', '这座塔高100米。（举例子）'],
+        answer: 0,
+        analysis: '用具体数字"100米"说明高度，是列数字的说明方法'
+      },
+      {
+        q: `${title}："差"在"差不多"中读？`,
+        options: ['chà', 'chā', 'chāi', 'cī'],
+        answer: 0,
+        analysis: '"差不多"中"差"读chà（第四声），表示不相同、不相合'
+      },
+      {
+        q: `${title}：选择正确的句式变换`,
+        options: ['把字句：我把作业做完了。', '把字句：作业把我做完了。', '把字句：我把作业被做完了。', '把字句：作业把被我做完了。'],
+        answer: 0,
+        analysis: '正确把字句结构：主语+把+宾语+动作，即"我把作业做完了"'
+      },
+      {
+        q: `${title}：下列标点使用正确的是？`,
+        options: ['"快来！"妈妈喊道。', '"快来"!妈妈喊道。', '"快来!"妈妈喊道。', '"快来，"妈妈喊道。'],
+        answer: 0,
+        analysis: '感叹号应在引号内，表示引用的语气'
+      },
+      {
+        q: `${title}：选择正确的文学常识`,
+        options: ['《爬山虎的脚》作者是叶圣陶。', '《爬山虎的脚》作者是老舍。', '《爬山虎的脚》作者是鲁迅。', '《爬山虎的脚》作者是巴金。'],
+        answer: 0,
+        analysis: '《爬山虎的脚》作者是叶圣陶'
+      }
+    ];
+    return shuffleOptions(rawQuestions4[num - 1]);
+  }
+
+  // ========== 五年级题目 ==========
+  else {
+    const rawQuestions5 = [
+      {
+        q: `${title}：下列词语中，注音完全正确的是？`,
+        options: ['造诣(zào yì)', '造诣(zhào yì)', '造诣(zào zhǐ)', '造诣(zǎo yì)'],
+        answer: 0,
+        analysis: '"造诣"读zào yì，"诣"读yì（第四声），不是zhǐ'
+      },
+      {
+        q: `${title}："载"在"记载"中读？`,
+        options: ['zǎi', 'zài', 'zāi', 'zǎn'],
+        answer: 0,
+        analysis: '"记载"中"载"读zǎi（第三声），表示记录；读zài时表示装载'
+      },
+      {
+        q: `${title}：选择正确的文言文解释`,
+        options: ['"学而不思则罔"：罔：迷惑', '"学而不思则罔"：罔：没有', '"学而不思则罔"：罔：网子', '"学而不思则罔"：罔：忘记'],
+        answer: 0,
+        analysis: '"罔"在此指迷惑、迷茫，整句意思是只学习不思考就会迷惑'
+      },
+      {
+        q: `${title}：下列句子中，修辞手法判断正确的是？`,
+        options: ['飞流直下三千尺，疑是银河落九天。（夸张、比喻）', '飞流直下三千尺，疑是银河落九天。（拟人、比喻）', '飞流直下三千尺，疑是银河落九天。（排比、夸张）', '飞流直下三千尺，疑是银河落九天。（对偶、拟人）'],
+        answer: 0,
+        analysis: '"三千尺"是夸张，"疑是银河"是比喻'
+      },
+      {
+        q: `${title}：选择正确的病句修改`,
+        options: ['通过努力，他的成绩提高了。（正确）', '通过努力，使他的成绩提高了。', '通过努力，他的成绩被提高了。', '通过努力，把他的成绩提高了。'],
+        answer: 0,
+        analysis: 'B缺主语（"使"掩盖主语），C被动不当，D把字句使用不当'
+      },
+      {
+        q: `${title}："荷"在"荷枪实弹"中读？`,
+        options: ['hè', 'hé', 'hē', 'huó'],
+        answer: 0,
+        analysis: '"荷枪实弹"中"荷"读hè（第四声），表示扛着、背着'
+      },
+      {
+        q: `${title}：选择正确的词语辨析`,
+        options: ['"必须"：副词，一定要；"必需"：动词，不可缺少', '"必须"：动词，一定要；"必需"：副词，不可缺少', '意思相同，可以互换', '读音不同，意思相同'],
+        answer: 0,
+        analysis: '"必须"强调事理上的必要，"必需"强调不可缺少'
+      },
+      {
+        q: `${title}：下列文化常识正确的是？`,
+        options: ['"四书"指《大学》《中庸》《论语》《孟子》', '"四书"指《诗经》《尚书》《礼记》《周易》', '"四书"指《老子》《庄子》《列子》《荀子》', '"四书"指《史记》《汉书》《后汉书》《三国志》'],
+        answer: 0,
+        analysis: '"四书"是儒家经典：《大学》《中庸》《论语》《孟子》'
+      },
+      {
+        q: `${title}：选择正确的标点使用`,
+        options: ['《红楼梦》《西游记》《三国演义》《水浒传》是中国四大名著。', '红楼梦、西游记、三国演义、水浒传是中国四大名著。', '"红楼梦"、"西游记"、"三国演义"、"水浒传"是中国四大名著。', '（红楼梦）（西游记）（三国演义）（水浒传）是中国四大名著。'],
+        answer: 0,
+        analysis: '书名用书名号《》，并列书名号之间不用顿号'
+      },
+      {
+        q: `${title}："供"在"提供"中读？`,
+        options: ['tí gōng', 'tí gòng', 'tí gǒng', 'tí gong'],
+        answer: 0,
+        analysis: '"提供"中"供"读gōng（第一声），表示供给；读gòng时指供品、口供'
+      }
+    ];
+    return shuffleOptions(rawQuestions5[num - 1]);
+  }
+}
+
+// 辅助函数：打乱数组并返回新数组和原最后一个元素的新索引
+function shuffleArray(arr) {
+  const indices = arr.map((_, i) => i);
+  // Fisher-Yates 洗牌算法
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+
+  const shuffledArr = indices.map(i => arr[i]);
+  const lastElementOriginalIndex = arr.length - 1;
+  const newIndex = indices.indexOf(lastElementOriginalIndex);
+
+  return { arr: shuffledArr, newIndex: newIndex };
+}
+
+function generateShuxueQuestion(title, grade, num) {
+  // 每个年级10道题：前5道计算题，后5道应用题
+  let maxNum = grade * 20;
+  let a = Math.floor(Math.random() * maxNum) + 1;
+  let b = Math.floor(Math.random() * maxNum) + 1;
+  let c = Math.floor(Math.random() * 10) + 1;
+
+  // ========== 一年级题目 ==========
+  if (grade === 1) {
+    const questions1 = [
+      { q: `${a} + ${b} = ?`, ans: a + b, type: 'calc' },
+      { q: `${Math.max(a,b)} - ${Math.min(a,b)} = ?`, ans: Math.abs(a - b), type: 'calc' },
+      { q: `${a} + ${b} + ${c} = ?`, ans: a + b + c, type: 'calc' },
+      { q: `比${a}多${c}的数是？`, ans: a + c, type: 'calc' },
+      { q: `比${a + b}少${c}的数是？`, ans: a + b - c, type: 'calc' },
+      { 
+        q: `小明有${a}颗糖，小红有${b}颗糖，他们一共有多少颗糖？`, 
+        ans: a + b, 
+        type: 'app',
+        analysis: `求一共用加法：${a} + ${b} = ${a + b}（颗）`
+      },
+      { 
+        q: `妈妈买了${Math.max(a,b)}个苹果，吃了${Math.min(a,b)}个，还剩多少个？`, 
+        ans: Math.abs(a - b), 
+        type: 'app',
+        analysis: `求剩余用减法：${Math.max(a,b)} - ${Math.min(a,b)} = ${Math.abs(a - b)}（个）`
+      },
+      { 
+        q: `教室里有${a}个男生，${b}个女生，一共有多少个学生？`, 
+        ans: a + b, 
+        type: 'app',
+        analysis: `求总人数用加法：${a} + ${b} = ${a + b}（个）`
+      },
+      { 
+        q: `小华有${a + b}元钱，买文具花了${a}元，还剩多少元？`, 
+        ans: b, 
+        type: 'app',
+        analysis: `求剩余用减法：${a + b} - ${a} = ${b}（元）`
+      },
+      { 
+        q: `树上有${a}只鸟，又飞来了${b}只，现在树上有多少只鸟？`, 
+        ans: a + b, 
+        type: 'app',
+        analysis: `求现在有多少用加法：${a} + ${b} = ${a + b}（只）`
+      }
+    ];
+
+    let t = questions1[num - 1];
+    let options, correctIdx;
+
+    if (t.type === 'calc') {
+      let wrongOpts = [t.ans + 1, t.ans - 1, t.ans + 2].filter(x => x >= 0 && x !== t.ans).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      return {
+        q: `${title}：${t.q}`,
+        options: options,
+        answer: correctIdx,
+        analysis: `${t.q.replace('=', '')} = ${t.ans}`
+      };
+    } else {
+      let wrongOpts = [t.ans + 1, t.ans - 1, t.ans + 2].filter(x => x >= 0 && x !== t.ans).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      let unit = t.q.includes('元') ? '元' : t.q.includes('颗') ? '颗' : t.q.includes('个') ? '个' : t.q.includes('只') ? '只' : '';
+      return {
+        q: `${title}：${t.q}`,
+        options: options.map(x => x + unit),
+        answer: correctIdx,
+        analysis: t.analysis
+      };
+    }
+  }
+
+  // ========== 二年级题目 ==========
+  else if (grade === 2) {
+    const questions2 = [
+      { q: `${a} × ${c} = ?`, ans: a * c, type: 'calc' },
+      { q: `${a * c} ÷ ${c} = ?`, ans: a, type: 'calc' },
+      { q: `${a} + ${b} - ${c} = ?`, ans: a + b - c, type: 'calc' },
+      { q: `${a} × ${c} + ${b} = ?`, ans: a * c + b, type: 'calc' },
+      { q: `${a * c} ÷ ${c} + ${b} = ?`, ans: a + b, type: 'calc' },
+      { 
+        q: `每支铅笔${c}元，买${a}支铅笔需要多少元？`, 
+        ans: a * c, 
+        type: 'app',
+        analysis: `单价×数量=总价：${c} × ${a} = ${a * c}（元）`
+      },
+      { 
+        q: `有${a * c}个苹果，平均分给${c}个小朋友，每人分得几个？`, 
+        ans: a, 
+        type: 'app',
+        analysis: `总数÷份数=每份数：${a * c} ÷ ${c} = ${a}（个）`
+      },
+      { 
+        q: `一本书有${a}页，小明每天看${c}页，${Math.ceil(a/c)}天能看完。这本书一共有多少页？`, 
+        ans: a, 
+        type: 'app',
+        analysis: `题目已告知这本书有${a}页，验算：每天${c}页 × ${Math.ceil(a/c)}天 ≈ ${a}页`
+      },
+      { 
+        q: `妈妈买了${a}斤苹果，${b}斤香蕉，苹果比香蕉多多少斤？`, 
+        ans: Math.abs(a - b), 
+        type: 'app',
+        analysis: `求相差数用减法：${Math.max(a,b)} - ${Math.min(a,b)} = ${Math.abs(a - b)}（斤）`
+      },
+      { 
+        q: `一辆公交车上有${a}人，到站后上来${b}人，下去${c}人，现在车上有多少人？`, 
+        ans: a + b - c, 
+        type: 'app',
+        analysis: `原有人数+上来人数-下去人数=现有人数：${a} + ${b} - ${c} = ${a + b - c}（人）`
+      }
+    ];
+
+    let t = questions2[num - 1];
+    let options, correctIdx;
+
+    if (t.type === 'calc') {
+      let wrongOpts = [t.ans + 1, t.ans - 1, t.ans + c].filter(x => x >= 0 && x !== t.ans).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      return {
+        q: `${title}：${t.q}`,
+        options: options,
+        answer: correctIdx,
+        analysis: `${t.q.replace('=', '')} = ${t.ans}`
+      };
+    } else {
+      let wrongOpts = [t.ans + 1, t.ans - 1, t.ans + c].filter(x => x >= 0 && x !== t.ans).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      let unit = t.q.includes('元') ? '元' : t.q.includes('页') ? '页' : t.q.includes('人') ? '人' : '个';
+      return {
+        q: `${title}：${t.q}`,
+        options: options.map(x => x + unit),
+        answer: correctIdx,
+        analysis: t.analysis
+      };
+    }
+  }
+
+  // ========== 三年级题目 ==========
+  else if (grade === 3) {
+    let speed = Math.floor(Math.random() * 50) + 30;
+    let time = Math.floor(Math.random() * 3) + 2;
+    let price = Math.floor(Math.random() * 10) + 5;
+
+    const questions3 = [
+      { q: `${a} × ${c} × 2 = ?`, ans: a * c * 2, type: 'calc' },
+      { q: `${a * c * 2} ÷ ${c} ÷ 2 = ?`, ans: a, type: 'calc' },
+      { q: `(${a} + ${b}) × ${c} = ?`, ans: (a + b) * c, type: 'calc' },
+      { q: `${a * c + b} - ${b} × 2 = ?`, ans: a * c - b, type: 'calc' },
+      { q: `${a} × ${c} + ${b} × ${c} = ?`, ans: (a + b) * c, type: 'calc' },
+      { 
+        q: `一辆汽车每小时行驶${speed}千米，行驶了${time}小时，一共行驶了多少千米？`, 
+        ans: speed * time, 
+        type: 'app',
+        analysis: `速度×时间=路程：${speed} × ${time} = ${speed * time}（千米）`
+      },
+      { 
+        q: `学校买来${a * c}本故事书，平均分给${c}个班级，每个班级分得多少本？`, 
+        ans: a, 
+        type: 'app',
+        analysis: `总本数÷班级数=每班本数：${a * c} ÷ ${c} = ${a}（本）`
+      },
+      { 
+        q: `一个篮球${price}元，买${a}个篮球，付给售货员${price * a + 10}元，应找回多少元？`, 
+        ans: 10, 
+        type: 'app',
+        analysis: `付给的钱-应付的钱=找回的钱：${price * a + 10} - ${price * a} = 10（元）`
+      },
+      { 
+        q: `工厂每天生产${a}个零件，一周（7天）能生产多少个零件？`, 
+        ans: a * 7, 
+        type: 'app',
+        analysis: `每天产量×天数=总产量：${a} × 7 = ${a * 7}（个）`
+      },
+      { 
+        q: `小明从家到学校要走${c}分钟，每分钟走${a}米，他家到学校有多少米？`, 
+        ans: a * c, 
+        type: 'app',
+        analysis: `速度×时间=路程：${a} × ${c} = ${a * c}（米）`
+      }
+    ];
+
+    let t = questions3[num - 1];
+    let options, correctIdx;
+
+    if (t.type === 'calc') {
+      let wrongOpts = [t.ans + c, t.ans - c, t.ans + 10].filter(x => x >= 0 && x !== t.ans).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      return {
+        q: `${title}：${t.q}`,
+        options: options,
+        answer: correctIdx,
+        analysis: `${t.q.replace('=', '')} = ${t.ans}`
+      };
+    } else {
+      let wrongOpts = [t.ans + 10, t.ans - 10, t.ans + c].filter(x => x >= 0 && x !== t.ans).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      let unit = t.q.includes('千米') ? '千米' : t.q.includes('本') ? '本' : t.q.includes('元') ? '元' : t.q.includes('米') ? '米' : '个';
+      return {
+        q: `${title}：${t.q}`,
+        options: options.map(x => x + unit),
+        answer: correctIdx,
+        analysis: t.analysis
+      };
+    }
+  }
+
+  // ========== 四年级题目 ==========
+  else if (grade === 4) {
+    let length = Math.floor(Math.random() * 20) + 10;
+    let width = Math.floor(Math.random() * 10) + 5;
+    let workers = Math.floor(Math.random() * 5) + 3;
+    let days = Math.floor(Math.random() * 5) + 2;
+
+    const questions4 = [
+      { q: `(${a} + ${b}) × (${c} + 2) = ?`, ans: (a + b) * (c + 2), type: 'calc' },
+      { q: `${a * 100 + b} ÷ 25 = ?`, ans: (a * 100 + b) / 25, type: 'calc' },
+      { q: `${a} × 125 × 8 = ?`, ans: a * 1000, type: 'calc' },
+      { q: `(${a} + ${b}) × 4 - ${c} × 4 = ?`, ans: (a + b - c) * 4, type: 'calc' },
+      { q: `4800 ÷ 125 ÷ 8 = ?`, ans: 4.8, type: 'calc' },
+      { 
+        q: `一个长方形花坛，长${length}米，宽${width}米，它的面积是多少平方米？`, 
+        ans: length * width, 
+        type: 'app',
+        analysis: `长方形面积=长×宽：${length} × ${width} = ${length * width}（平方米）`
+      },
+      { 
+        q: `${workers}个工人${days}天共生产了${workers * days * a}个零件，平均每个工人每天生产多少个？`, 
+        ans: a, 
+        type: 'app',
+        analysis: `总产量÷工人数÷天数=每人每天产量：${workers * days * a} ÷ ${workers} ÷ ${days} = ${a}（个）`
+      },
+      { 
+        q: `甲乙两地相距${a * 60}千米，一辆汽车从甲地开往乙地，每小时行60千米，几小时到达？`, 
+        ans: a, 
+        type: 'app',
+        analysis: `路程÷速度=时间：${a * 60} ÷ 60 = ${a}（小时）`
+      },
+      { 
+        q: `学校买来${a * 25}本练习本，每班分25本，可以分给多少个班？`, 
+        ans: a, 
+        type: 'app',
+        analysis: `总本数÷每班本数=班级数：${a * 25} ÷ 25 = ${a}（个）`
+      },
+      { 
+        q: `一桶油连桶重${a + b}千克，用去一半后连桶重${a}千克，桶重多少千克？`, 
+        ans: 2 * a - (a + b), 
+        type: 'app',
+        analysis: `一半油重=${a + b} - ${a} = ${b}千克，油重=${b}×2=${b*2}千克，桶重=${a + b} - ${b*2} = ${2 * a - (a + b)}千克`
+      }
+    ];
+
+    let t = questions4[num - 1];
+    let options, correctIdx;
+
+    if (t.type === 'calc') {
+      let wrongOpts = [t.ans + 10, Math.abs(t.ans - 10), t.ans * 2].filter(x => x >= 0 && x !== t.ans).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      return {
+        q: `${title}：${t.q}`,
+        options: options,
+        answer: correctIdx,
+        analysis: `${t.q.replace('=', '')} = ${t.ans}`
+      };
+    } else {
+      let wrongOpts = [t.ans + 5, Math.abs(t.ans - 5), t.ans + 10].filter(x => x >= 0 && x !== t.ans).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      let unit = t.q.includes('平方米') ? '平方米' : t.q.includes('个') ? '个' : t.q.includes('小时') ? '小时' : '千克';
+      return {
+        q: `${title}：${t.q}`,
+        options: options.map(x => x + unit),
+        answer: correctIdx,
+        analysis: t.analysis
+      };
+    }
+  }
+
+  // ========== 五年级题目 ==========
+  else {
+    let tankLength = Math.floor(Math.random() * 5) + 5;
+    let tankWidth = Math.floor(Math.random() * 3) + 2;
+    let tankHeight = Math.floor(Math.random() * 2) + 1;
+    let speedA = Math.floor(Math.random() * 20) + 40;
+    let speedB = Math.floor(Math.random() * 15) + 30;
+    let meetTime = Math.floor(Math.random() * 3) + 2;
+
+    const questions5 = [
+      { q: `3.6 × ${a} + 6.4 × ${a} = ?`, ans: 10 * a, type: 'calc' },
+      { q: `(${a} + ${b}) × 0.25 × 4 = ?`, ans: a + b, type: 'calc' },
+      { q: `${a} × ${b} + ${a} × ${c} = ?`, ans: a * (b + c), type: 'calc' },
+      { q: `1.25 × 3.2 × 2.5 = ?`, ans: 10, type: 'calc' },
+      { q: `(${a} × ${b} + ${a} × ${c}) ÷ ${a} = ?`, ans: b + c, type: 'calc' },
+      { 
+        q: `一个长方体水池，长${tankLength}米，宽${tankWidth}米，深${tankHeight}米，最多能装水多少立方米？`, 
+        ans: tankLength * tankWidth * tankHeight, 
+        type: 'app',
+        analysis: `长方体体积=长×宽×高：${tankLength} × ${tankWidth} × ${tankHeight} = ${tankLength * tankWidth * tankHeight}（立方米）`
+      },
+      { 
+        q: `甲乙两车从两地同时相向而行，甲车每小时行${speedA}千米，乙车每小时行${speedB}千米，${meetTime}小时后相遇，两地相距多少千米？`, 
+        ans: (speedA + speedB) * meetTime, 
+        type: 'app',
+        analysis: `速度和×相遇时间=总路程：(${speedA} + ${speedB}) × ${meetTime} = ${(speedA + speedB) * meetTime}（千米）`
+      },
+      { 
+        q: `一批货物共${a * b}吨，用载重${b}吨的卡车运，已经运了${a - 1}车，还剩多少吨没运？`, 
+        ans: b, 
+        type: 'app',
+        analysis: `总吨数-已运吨数=剩余吨数：${a * b} - ${b} × ${a - 1} = ${a * b} - ${b * (a - 1)} = ${b}（吨）`
+      },
+      { 
+        q: `某班男生人数是女生的${c}倍，男生有${a * c}人，女生有多少人？`, 
+        ans: a, 
+        type: 'app',
+        analysis: `女生人数=男生人数÷倍数：${a * c} ÷ ${c} = ${a}（人）`
+      },
+      { 
+        q: `一项工程，甲队单独做${a}天完成，乙队单独做${b}天完成，两队合作一天完成这项工程的几分之几？`, 
+        ans: Math.round((a + b) * 100 / (a * b)) / 100, 
+        type: 'app',
+        analysis: `甲效率=1/${a}，乙效率=1/${b}，合作效率=1/${a} + 1/${b} = ${Math.round((a + b) * 100 / (a * b)) / 100}`
+      }
+    ];
+
+    let t = questions5[num - 1];
+    let options, correctIdx;
+
+    if (t.type === 'calc') {
+      let wrongOpts = [t.ans + 1, Math.abs(t.ans - 1), t.ans + 10].filter(x => x >= 0 && x !== t.ans).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      return {
+        q: `${title}：${t.q}`,
+        options: options,
+        answer: correctIdx,
+        analysis: `${t.q.replace('=', '')} = ${t.ans}`
+      };
+    } else {
+      let wrongOpts = [t.ans + 5, Math.abs(t.ans - 5), t.ans + 10].filter(x => x >= 0 && x !== t.ans && Number.isInteger(x)).slice(0, 3);
+      let allOptions = [...wrongOpts, t.ans];
+      const shuffled = shuffleArray(allOptions);
+      options = shuffled.arr;
+      correctIdx = shuffled.newIndex;
+
+      let unit = t.q.includes('立方米') ? '立方米' : t.q.includes('千米') ? '千米' : t.q.includes('吨') ? '吨' : t.q.includes('人') ? '人' : '';
+      return {
+        q: `${title}：${t.q}`,
+        options: options.map(x => x + unit),
+        answer: correctIdx,
+        analysis: t.analysis
+      };
+    }
+  }
+}
+
+function generateYingyuQuestion(title, grade, num) {
+  const words = ['apple', 'book', 'cat', 'dog', 'elephant', 'fish', 'girl', 'hand', 'ice', 'juice'];
+  const word = words[num - 1];
+
+  const rawQuestions = [
+    { q: `阅读理解：I have a ${word}. It is nice. What do I have?`, options: ['A ' + word, 'A book', 'A pen', 'A bag'], answer: 0, analysis: `文中说"I have a ${word}"` },
+    { q: `"${word}" 的中文意思是？`, options: ['正确释义', '其他意思A', '其他意思B', '其他意思C'], answer: 0, analysis: `${word}的正确释义` },
+    { q: `选出正确的英文单词`, options: [word, '错误词A', '错误词B', '错误词C'], answer: 0, analysis: `${word}是正确的` },
+    { q: `I can ___ . (动词形式)`, options: ['sing', 'singing', 'sang', 'sung'], answer: 0, analysis: 'can后面用动词原形' },
+    { q: `This is ___ book. (物主代词)`, options: ['my', 'me', 'I', 'mine'], answer: 0, analysis: 'my是形容词性物主代词' },
+    { q: `___ is your name? (疑问词)`, options: ['What', 'How', 'Who', 'Where'], answer: 0, analysis: 'What is your name?' },
+    { q: `I am ___ years old. (数词)`, options: ['six', 'sixes', 'sixth', 'sixing'], answer: 0, analysis: '表示年龄用基数词' },
+    { q: `___ you like apples? (助动词)`, options: ['Do', 'Are', 'Is', 'Does'], answer: 0, analysis: '实义动词like的一般疑问句用Do' },
+    { q: `The apple is ___. (形容词)`, options: ['red', 'reds', 'reding', 'reded'], answer: 0, analysis: 'be动词后接形容词' },
+    { q: `I like to ___. (不定式)`, options: ['sing', 'singing', 'sings', 'sang'], answer: 0, analysis: 'like to do sth.' }
+  ];
+
+  return shuffleOptions({
+    q: `${title}：${rawQuestions[num - 1].q}`,
+    options: rawQuestions[num - 1].options,
+    answer: rawQuestions[num - 1].answer,
+    analysis: rawQuestions[num - 1].analysis
+  });
+}
+
+
+// ==================== 英语单词库（所有年级）====================
+const englishWordBank = {};
+
+function generateAllWords() {
+  // 一年级单词（基础）
+  englishWordBank[1] = {
+    1: {
+      1: [{word:'hello',phonetic:'/həˈləʊ/',meaning:'你好',example:'Hello!'},{word:'I',phonetic:'/aɪ/',meaning:'我',example:'I am Tom.'},{word:'Miss',phonetic:'/mɪs/',meaning:'小姐',example:'Miss Fang'},{word:'goodbye',phonetic:'/ˌɡʊdˈbaɪ/',meaning:'再见',example:'Goodbye!'},{word:'morning',phonetic:'/ˈmɔːnɪŋ/',meaning:'早上',example:'Good morning.'},{word:'afternoon',phonetic:'/ˌɑːftəˈnuːn/',meaning:'下午',example:'Good afternoon.'},{word:'evening',phonetic:'/ˈiːvnɪŋ/',meaning:'晚上',example:'Good evening.'},{word:'night',phonetic:'/naɪt/',meaning:'夜晚',example:'Good night.'},{word:'hi',phonetic:'/haɪ/',meaning:'嗨',example:'Hi there!'},{word:'name',phonetic:'/neɪm/',meaning:'名字',example:'My name is...'}],
+      2: [{word:'book',phonetic:'/bʊk/',meaning:'书',example:'This is my book.'},{word:'ruler',phonetic:'/ˈruːlə/',meaning:'尺子',example:'I have a ruler.'},{word:'pencil',phonetic:'/ˈpensl/',meaning:'铅笔',example:'This is a pencil.'},{word:'rubber',phonetic:'/ˈrʌbə/',meaning:'橡皮',example:'My rubber.'},{word:'pen',phonetic:'/pen/',meaning:'钢笔',example:'Is this your pen?'},{word:'bag',phonetic:'/bæɡ/',meaning:'书包',example:'My bag is blue.'},{word:'desk',phonetic:'/desk/',meaning:'书桌',example:'Clean the desk.'},{word:'chair',phonetic:'/tʃeə/',meaning:'椅子',example:'Sit down.'},{word:'this',phonetic:'/ðɪs/',meaning:'这',example:'This is...'},{word:'that',phonetic:'/ðæt/',meaning:'那',example:'That is...'}],
+      3: [{word:'one',phonetic:'/wʌn/',meaning:'一',example:'One apple.'},{word:'two',phonetic:'/tuː/',meaning:'二',example:'Two books.'},{word:'three',phonetic:'/θriː/',meaning:'三',example:'Three cats.'},{word:'four',phonetic:'/fɔː/',meaning:'四',example:'Four dogs.'},{word:'five',phonetic:'/faɪv/',meaning:'五',example:'Five fingers.'},{word:'six',phonetic:'/sɪks/',meaning:'六',example:'Six years old.'},{word:'seven',phonetic:'/ˈsevn/',meaning:'七',example:'Seven days.'},{word:'eight',phonetic:'/eɪt/',meaning:'八',example:'Eight birds.'},{word:'nine',phonetic:'/naɪn/',meaning:'九',example:'Nine flowers.'},{word:'ten',phonetic:'/ten/',meaning:'十',example:'Ten fingers.'}],
+      4: [{word:'red',phonetic:'/red/',meaning:'红色',example:'I like red.'},{word:'blue',phonetic:'/bluː/',meaning:'蓝色',example:'Blue sky.'},{word:'yellow',phonetic:'/ˈjeləʊ/',meaning:'黄色',example:'Yellow banana.'},{word:'green',phonetic:'/ɡriːn/',meaning:'绿色',example:'Green grass.'},{word:'orange',phonetic:'/ˈɒrɪndʒ/',meaning:'橙色',example:'Orange orange.'},{word:'black',phonetic:'/blæk/',meaning:'黑色',example:'Black hair.'},{word:'white',phonetic:'/waɪt/',meaning:'白色',example:'White snow.'},{word:'brown',phonetic:'/braʊn/',meaning:'棕色',example:'Brown bear.'},{word:'pink',phonetic:'/pɪŋk/',meaning:'粉色',example:'Pink flower.'},{word:'purple',phonetic:'/ˈpɜːpl/',meaning:'紫色',example:'Purple grapes.'}],
+      5: [{word:'apple',phonetic:'/ˈæpl/',meaning:'苹果',example:'An apple.'},{word:'pear',phonetic:'/peə/',meaning:'梨',example:'A sweet pear.'},{word:'peach',phonetic:'/piːtʃ/',meaning:'桃子',example:'A juicy peach.'},{word:'banana',phonetic:'/bəˈnɑːnə/',meaning:'香蕉',example:'Yellow banana.'},{word:'grape',phonetic:'/ɡreɪp/',meaning:'葡萄',example:'Purple grapes.'},{word:'watermelon',phonetic:'/ˈwɔːtəmelən/',meaning:'西瓜',example:'Big watermelon.'},{word:'strawberry',phonetic:'/ˈstrɔːbəri/',meaning:'草莓',example:'Red strawberry.'},{word:'fruit',phonetic:'/fruːt/',meaning:'水果',example:'I like fruit.'},{word:'sweet',phonetic:'/swiːt/',meaning:'甜的',example:'It is sweet.'},{word:'sour',phonetic:'/ˈsaʊə/',meaning:'酸的',example:'It is sour.'}],
+      6: [{word:'face',phonetic:'/feɪs/',meaning:'脸',example:'Wash your face.'},{word:'eye',phonetic:'/aɪ/',meaning:'眼睛',example:'Two eyes.'},{word:'ear',phonetic:'/ɪə/',meaning:'耳朵',example:'Big ears.'},{word:'nose',phonetic:'/nəʊz/',meaning:'鼻子',example:'Small nose.'},{word:'mouth',phonetic:'/maʊθ/',meaning:'嘴巴',example:'Open mouth.'},{word:'touch',phonetic:'/tʌtʃ/',meaning:'触摸',example:'Touch it.'},{word:'feel',phonetic:'/fiːl/',meaning:'感觉',example:'How does it feel?'},{word:'soft',phonetic:'/sɒft/',meaning:'软的',example:'It is soft.'},{word:'hard',phonetic:'/hɑːd/',meaning:'硬的',example:'It is hard.'},{word:'hand',phonetic:'/hænd/',meaning:'手',example:'Wash hands.'}],
+      7: [{word:'sing',phonetic:'/sɪŋ/',meaning:'唱歌',example:'I can sing.'},{word:'dance',phonetic:'/dɑːns/',meaning:'跳舞',example:'She can dance.'},{word:'draw',phonetic:'/drɔː/',meaning:'画画',example:'Draw a picture.'},{word:'run',phonetic:'/rʌn/',meaning:'跑',example:'Run fast.'},{word:'jump',phonetic:'/dʒʌmp/',meaning:'跳',example:'Jump high.'},{word:'read',phonetic:'/riːd/',meaning:'读',example:'Read a book.'},{word:'write',phonetic:'/raɪt/',meaning:'写',example:'Write name.'},{word:'swim',phonetic:'/swɪm/',meaning:'游泳',example:'Swim fast.'},{word:'fly',phonetic:'/flaɪ/',meaning:'飞',example:'Birds fly.'},{word:'can',phonetic:'/kæn/',meaning:'能',example:'I can swim.'}],
+      8: [{word:'father',phonetic:'/ˈfɑːðə/',meaning:'爸爸',example:'My father.'},{word:'mother',phonetic:'/ˈmʌðə/',meaning:'妈妈',example:'My mother.'},{word:'brother',phonetic:'/ˈbrʌðə/',meaning:'兄弟',example:'My brother.'},{word:'sister',phonetic:'/ˈsɪstə/',meaning:'姐妹',example:'My sister.'},{word:'me',phonetic:'/miː/',meaning:'我',example:'Look at me.'},{word:'family',phonetic:'/ˈfæməli/',meaning:'家庭',example:'My family.'},{word:'who',phonetic:'/huː/',meaning:'谁',example:'Who is he?'},{word:'he',phonetic:'/hiː/',meaning:'他',example:'He is Tom.'},{word:'she',phonetic:'/ʃiː/',meaning:'她',example:'She is Lily.'},{word:'love',phonetic:'/lʌv/',meaning:'爱',example:'I love you.'}]
+    },
+    2: { /* 下学期类似 */ }
+  };
+
+  // 为其他年级生成单词
+  const gradeWords = {
+    2: ['student', 'teacher', 'school', 'classroom', 'friend', 'happy', 'sad', 'big', 'small', 'play'],
+    3: ['subject', 'science', 'music', 'sport', 'strong', 'fast', 'slow', 'clean', 'dirty', 'beautiful'],
+    4: ['country', 'city', 'village', 'river', 'mountain', 'forest', 'brave', 'shy', 'clever', 'quiet'],
+    5: ['future', 'dream', 'hope', 'wish', 'goal', 'plan', 'proud', 'modest', 'honest', 'friendly']
+  };
+
+  const gradeMeanings = {
+    2: ['学生', '老师', '学校', '教室', '朋友', '开心', '难过', '大', '小', '玩'],
+    3: ['科目', '科学', '音乐', '运动', '强壮', '快', '慢', '干净', '脏', '美丽'],
+    4: ['国家', '城市', '村庄', '河流', '山', '森林', '勇敢', '害羞', '聪明', '安静'],
+    5: ['未来', '梦想', '希望', '愿望', '目标', '计划', '骄傲', '谦虚', '诚实', '友好']
+  };
+
+  for (let g = 2; g <= 5; g++) {
+    englishWordBank[g] = {};
+    for (let s = 1; s <= 2; s++) {
+      englishWordBank[g][s] = {};
+      for (let u = 1; u <= 8; u++) {
+        englishWordBank[g][s][u] = [];
+        for (let i = 0; i < 10; i++) {
+          let wordIndex = (i + u) % 10;
+          let word = gradeWords[g][wordIndex];
+          englishWordBank[g][s][u].push({
+            word: word,
+            phonetic: '/' + word + '/',
+            meaning: gradeMeanings[g][wordIndex],
+            example: 'This is a ' + word + '.'
+          });
+        }
+      }
+    }
+  }
+}
+
+// ==================== 英语句子库（所有年级）====================
+const englishSentenceBank = {};
+
+function generateAllSentences() {
+  // 一年级句子
+  englishSentenceBank[1] = {
+    1: {
+      1: [{sentence:'Hello, how are you?',phonetic:'/həˈləʊ haʊ ɑː juː/',meaning:'你好，你好吗？'},{sentence:'Good morning, Miss Fang.',phonetic:'/ɡʊd ˈmɔːnɪŋ mɪs fæŋ/',meaning:'早上好，方老师。'},{sentence:'Good afternoon, class.',phonetic:'/ɡʊd ˌɑːftəˈnuːn klɑːs/',meaning:'下午好，同学们。'},{sentence:'Good night, Mum.',phonetic:'/ɡʊd naɪt mʌm/',meaning:'晚安，妈妈。'},{sentence:'Hi, I am Tom.',phonetic:'/haɪ aɪ æm tɒm/',meaning:'嗨，我是汤姆。'},{sentence:'My name is Alice.',phonetic:'/maɪ neɪm ɪz ˈælɪs/',meaning:'我的名字是爱丽丝。'},{sentence:'I am a boy.',phonetic:'/aɪ æm ə bɔɪ/',meaning:'我是一个男孩。'},{sentence:'She is a girl.',phonetic:'/ʃiː ɪz ə ɡɜːl/',meaning:'她是一个女孩。'},{sentence:'Goodbye, see you.',phonetic:'/ˌɡʊdˈbaɪ siː juː/',meaning:'再见，回头见。'},{sentence:'Nice to meet you.',phonetic:'/naɪs tuː miːt juː/',meaning:'很高兴认识你。'}],
+      2: [{sentence:'This is my book.',phonetic:'/ðɪs ɪz maɪ bʊk/',meaning:'这是我的书。'},{sentence:'That is your ruler.',phonetic:'/ðæt ɪz jɔː ˈruːlə/',meaning:'那是你的尺子。'},{sentence:'I have a pencil.',phonetic:'/aɪ hæv ə ˈpensl/',meaning:'我有一支铅笔。'},{sentence:'Is this your pen?',phonetic:'/ɪz ðɪs jɔː pen/',meaning:'这是你的钢笔吗？'},{sentence:'Yes, it is.',phonetic:'/jes ɪt ɪz/',meaning:'是的，它是。'},{sentence:'No, it is not.',phonetic:'/nəʊ ɪt ɪz nɒt/',meaning:'不，它不是。'},{sentence:'Show me your bag.',phonetic:'/ʃəʊ miː jɔː bæɡ/',meaning:'给我看看你的书包。'},{sentence:'Clean the desk, please.',phonetic:'/kliːn ðə desk pliːz/',meaning:'请擦桌子。'},{sentence:'Sit on the chair.',phonetic:'/sɪt ɒn ðə tʃeə/',meaning:'坐在椅子上。'},{sentence:'Open your book.',phonetic:'/ˈəʊpən jɔː bʊk/',meaning:'打开你的书。'}],
+      3: [{sentence:'I am six years old.',phonetic:'/aɪ æm sɪks jɪəz əʊld/',meaning:'我六岁了。'},{sentence:'How many books?',phonetic:'/haʊ ˈmeni bʊks/',meaning:'有多少本书？'},{sentence:'I have five fingers.',phonetic:'/aɪ hæv faɪv ˈfɪŋɡəz/',meaning:'我有五根手指。'},{sentence:'Three apples, please.',phonetic:'/θriː ˈæplz pliːz/',meaning:'请给我三个苹果。'},{sentence:'I see seven birds.',phonetic:'/aɪ siː ˈsevn bɜːdz/',meaning:'我看见七只鸟。'},{sentence:'Ten minus two is eight.',phonetic:'/ten ˈmaɪnəs tuː ɪz eɪt/',meaning:'十减二等于八。'},{sentence:'Four plus five is nine.',phonetic:'/fɔː plʌs faɪv ɪz naɪn/',meaning:'四加五等于九。'},{sentence:'I can count to ten.',phonetic:'/aɪ kæn kaʊnt tuː ten/',meaning:'我能数到十。'},{sentence:'Give me eight crayons.',phonetic:'/ɡɪv miː eɪt ˈkreɪənz/',meaning:'给我八支蜡笔。'},{sentence:'I have two eyes.',phonetic:'/aɪ hæv tuː aɪz/',meaning:'我有两只眼睛。'}],
+      4: [{sentence:'I like red.',phonetic:'/aɪ laɪk red/',meaning:'我喜欢红色。'},{sentence:'The sky is blue.',phonetic:'/ðə skaɪ ɪz bluː/',meaning:'天空是蓝色的。'},{sentence:'A yellow banana.',phonetic:'/ə ˈjeləʊ bəˈnɑːnə/',meaning:'一根黄色的香蕉。'},{sentence:'Green grass.',phonetic:'/ɡriːn ɡrɑːs/',meaning:'绿色的草。'},{sentence:'What colour is it?',phonetic:'/wɒt ˈkʌlə ɪz ɪt/',meaning:'它是什么颜色的？'},{sentence:'It is orange.',phonetic:'/ɪt ɪz ˈɒrɪndʒ/',meaning:'它是橙色的。'},{sentence:'Black hair.',phonetic:'/blæk heə/',meaning:'黑色的头发。'},{sentence:'White snow.',phonetic:'/waɪt snəʊ/',meaning:'白色的雪。'},{sentence:'A pink flower.',phonetic:'/ə pɪŋk ˈflaʊə/',meaning:'一朵粉色的花。'},{sentence:'Mix red and blue.',phonetic:'/mɪks red ænd bluː/',meaning:'把红色和蓝色混合。'}],
+      5: [{sentence:'An apple a day.',phonetic:'/ən ˈæpl ə deɪ/',meaning:'一天一个苹果。'},{sentence:'A sweet pear.',phonetic:'/ə swiːt peə/',meaning:'一个甜的梨。'},{sentence:'I like bananas.',phonetic:'/aɪ laɪk bəˈnɑːnəz/',meaning:'我喜欢香蕉。'},{sentence:'Purple grapes.',phonetic:'/ˈpɜːpl ɡreɪps/',meaning:'紫色的葡萄。'},{sentence:'It is juicy.',phonetic:'/ɪt ɪz ˈdʒuːsi/',meaning:'它很多汁。'},{sentence:'Taste the peach.',phonetic:'/teɪst ðə piːtʃ/',meaning:'尝尝这个桃子。'},{sentence:'Smell the orange.',phonetic:'/smel ði ˈɒrɪndʒ/',meaning:'闻闻这个橙子。'},{sentence:'Is it sweet or sour?',phonetic:'/ɪz ɪt swiːt ɔː ˈsaʊə/',meaning:'它是甜的还是酸的？'},{sentence:'I want some fruit.',phonetic:'/aɪ wɒnt sʌm fruːt/',meaning:'我想要一些水果。'},{sentence:'Cut the watermelon.',phonetic:'/kʌt ðə ˈwɔːtəmelən/',meaning:'切西瓜。'}],
+      6: [{sentence:'Wash your face.',phonetic:'/wɒʃ jɔː feɪs/',meaning:'洗洗脸。'},{sentence:'Touch your nose.',phonetic:'/tʌtʃ jɔː nəʊz/',meaning:'摸摸你的鼻子。'},{sentence:'Open your mouth.',phonetic:'/ˈəʊpən jɔː maʊθ/',meaning:'张开嘴。'},{sentence:'Close your eyes.',phonetic:'/kləʊz jɔː aɪz/',meaning:'闭上眼睛。'},{sentence:'How does it feel?',phonetic:'/haʊ dʌz ɪt fiːl/',meaning:'它感觉怎么样？'},{sentence:'It is soft.',phonetic:'/ɪt ɪz sɒft/',meaning:'它很软。'},{sentence:'It is hard.',phonetic:'/ɪt ɪz hɑːd/',meaning:'它很硬。'},{sentence:'Smooth skin.',phonetic:'/smuːð skɪn/',meaning:'光滑的皮肤。'},{sentence:'Rough hands.',phonetic:'/rʌf hændz/',meaning:'粗糙的手。'},{sentence:'Listen with your ears.',phonetic:'/ˈlɪsn wɪð jɔː ɪəz/',meaning:'用耳朵听。'}],
+      7: [{sentence:'I can sing English songs.',phonetic:'/aɪ kæn sɪŋ ˈɪŋɡlɪʃ sɒŋz/',meaning:'我会唱英文歌。'},{sentence:'She can dance well.',phonetic:'/ʃiː kæn dɑːns wel/',meaning:'她跳舞跳得很好。'},{sentence:'Draw a picture.',phonetic:'/drɔː ə ˈpɪktʃə/',meaning:'画一幅画。'},{sentence:'Run fast, please.',phonetic:'/rʌn fɑːst pliːz/',meaning:'请快跑。'},{sentence:'Jump high!',phonetic:'/dʒʌmp haɪ/',meaning:'跳得高！'},{sentence:'Read the book.',phonetic:'/riːd ðə bʊk/',meaning:'读这本书。'},{sentence:'Write your name.',phonetic:'/raɪt jɔː neɪm/',meaning:'写你的名字。'},{sentence:'Swim like a fish.',phonetic:'/swɪm laɪk ə fɪʃ/',meaning:'像鱼一样游泳。'},{sentence:'Birds can fly high.',phonetic:'/bɜːdz kæn flaɪ haɪ/',meaning:'鸟能飞得很高。'},{sentence:'Can you play football?',phonetic:'/kæn juː pleɪ ˈfʊtbɔːl/',meaning:'你会踢足球吗？'}],
+      8: [{sentence:'This is my father.',phonetic:'/ðɪs ɪz maɪ ˈfɑːðə/',meaning:'这是我的爸爸。'},{sentence:'She is my mother.',phonetic:'/ʃiː ɪz maɪ ˈmʌðə/',meaning:'她是我的妈妈。'},{sentence:'My brother is tall.',phonetic:'/maɪ ˈbrʌðə ɪz tɔːl/',meaning:'我的哥哥很高。'},{sentence:'My sister is cute.',phonetic:'/maɪ ˈsɪstə ɪz kjuːt/',meaning:'我的妹妹很可爱。'},{sentence:'I love my family.',phonetic:'/aɪ lʌv maɪ ˈfæməli/',meaning:'我爱我的家人。'},{sentence:'Who is he?',phonetic:'/huː ɪz hiː/',meaning:'他是谁？'},{sentence:'He is my friend.',phonetic:'/hiː ɪz maɪ frend/',meaning:'他是我的朋友。'},{sentence:'Look at me.',phonetic:'/lʊk æt miː/',meaning:'看着我。'},{sentence:'A big family.',phonetic:'/ə bɪɡ ˈfæməli/',meaning:'一个大家庭。'},{sentence:'We are happy.',phonetic:'/wiː ɑː ˈhæpi/',meaning:'我们很快乐。'}]
+    },
+    2: { /* 下学期 */ }
+  };
+
+  // 为其他年级生成句子
+  const gradeSentences = {
+    2: [
+      {s: 'I go to school every day.', m: '我每天去上学。'},
+      {s: 'My favourite subject is English.', m: '我最喜欢的科目是英语。'},
+      {s: 'I like playing with my friends.', m: '我喜欢和朋友们玩。'},
+      {s: 'This is my new classroom.', m: '这是我的新教室。'},
+      {s: 'My teacher is very kind.', m: '我的老师很和蔼。'},
+      {s: 'I have a happy family.', m: '我有一个幸福的家庭。'},
+      {s: 'The school is big and clean.', m: '学校又大又干净。'},
+      {s: 'I study hard every day.', m: '我每天努力学习。'},
+      {s: 'We learn many things at school.', m: '我们在学校学很多东西。'},
+      {s: 'I love my school life.', m: '我爱我的学校生活。'}
+    ],
+    3: [
+      {s: 'Science is very interesting.', m: '科学很有趣。'},
+      {s: 'I am good at maths.', m: '我擅长数学。'},
+      {s: 'Music makes me happy.', m: '音乐让我快乐。'},
+      {s: 'Art is my favourite subject.', m: '美术是我最喜欢的科目。'},
+      {s: 'I like doing sports.', m: '我喜欢做运动。'},
+      {s: 'I want to be strong.', m: '我想变得强壮。'},
+      {s: 'He runs very fast.', m: '他跑得很快。'},
+      {s: 'The turtle walks slowly.', m: '乌龟走得很慢。'},
+      {s: 'I never give up.', m: '我从不放弃。'},
+      {s: 'Practice makes perfect.', m: '熟能生巧。'}
+    ],
+    4: [
+      {s: 'China is a great country.', m: '中国是一个伟大的国家。'},
+      {s: 'I live in a big city.', m: '我住在大城市。'},
+      {s: 'The village is very quiet.', m: '村庄很安静。'},
+      {s: 'The river is very long.', m: '这条河很长。'},
+      {s: 'We climbed the mountain.', m: '我们爬了山。'},
+      {s: 'The forest is beautiful.', m: '森林很美。'},
+      {s: 'We should protect nature.', m: '我们应该保护自然。'},
+      {s: 'The world is beautiful.', m: '世界很美好。'},
+      {s: 'I want to travel around.', m: '我想四处旅行。'},
+      {s: 'Every place is special.', m: '每个地方都很特别。'}
+    ],
+    5: [
+      {s: 'I have a dream for future.', m: '我对未来有梦想。'},
+      {s: 'I hope to be a doctor.', m: '我希望成为医生。'},
+      {s: 'My wish is to help others.', m: '我的愿望是帮助他人。'},
+      {s: 'I set a goal for myself.', m: '我为自己设定了目标。'},
+      {s: 'I make a plan every day.', m: '我每天制定计划。'},
+      {s: 'Be brave to face challenges.', m: '勇敢面对挑战。'},
+      {s: 'Do not be shy, try it.', m: '不要害羞，试试看。'},
+      {s: 'You are very clever.', m: '你很聪明。'},
+      {s: 'Never think you are foolish.', m: '永远不要觉得自己笨。'},
+      {s: 'Believe in yourself.', m: '相信你自己。'}
+    ]
+  };
+
+  for (let g = 2; g <= 5; g++) {
+    englishSentenceBank[g] = {};
+    for (let s = 1; s <= 2; s++) {
+      englishSentenceBank[g][s] = {};
+      for (let u = 1; u <= 8; u++) {
+        englishSentenceBank[g][s][u] = gradeSentences[g].map(sent => ({
+          sentence: sent.s,
+          phonetic: '/' + sent.s.toLowerCase().replace(/[^a-z\s]/g, '').replace(/\s+/g, ' ') + '/',
+          meaning: sent.m
+        }));
+      }
+    }
+  }
+}
+
+// 初始化所有数据
+generateAllQuestions();
+generateAllWords();
+generateAllSentences();
+
+
+// ==================== 全局状态 ====================
+let currentUser = null;
+let currentGrade = 1;
+let currentSubject = 'yuwen';
+let currentSemester = 1;
+let currentUnit = 1;
+let speakGrade = 1;
+let speakSemester = 1;
+let speakUnit = 1;
+let speakMode = 'word';
+let currentQuestions = [];
+let currentQuestionIndex = 0;
+let currentScore = 0;
+let wrongAnswers = [];
+let isRecording = false;
+let recognition = null;
+let currentWordIndex = 0;
+let currentSentenceIndex = 0;
+
+// ==================== 核心函数 ====================
+function init() {
+  const user = localStorage.getItem('currentUser');
+  if (user) {
+    currentUser = user;
+    showMainApp();
+  }
+
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.onresult = (e) => {
+      evaluateSpeech(e.results[0][0].transcript);
+      stopRecording();
+    };
+    recognition.onend = stopRecording;
+  }
+
+  renderUnits();
+  renderSpeakUnits();
+}
+
+function login() {
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value.trim();
+  if (!u || !p) return showError('请输入用户名和密码');
+
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  if (users[u]?.password === p) {
+    currentUser = u;
+    localStorage.setItem('currentUser', u);
+    showMainApp();
+  } else {
+    showError('用户名或密码错误');
+  }
+}
+
+function register() {
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value.trim();
+  if (!u || !p) return showError('请输入用户名和密码');
+
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  if (users[u]) return showError('用户名已存在');
+
+  users[u] = { password: p, wrongbook: [], speakRecords: [], challengeRecords: [] };
+  localStorage.setItem('users', JSON.stringify(users));
+  showError('注册成功，请登录', true);
+}
+
+function showError(msg, ok) {
+  const el = document.getElementById('errorTip');
+  el.textContent = msg;
+  el.style.color = ok ? 'var(--success)' : 'var(--danger)';
+  setTimeout(() => el.textContent = '', 3000);
+}
+
+function showMainApp() {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('userDisplay').textContent = currentUser;
+  document.getElementById('avatar').textContent = currentUser.charAt(0);
+  updateStats();
+}
+
+function logout() {
+  localStorage.removeItem('currentUser');
+  location.reload();
+}
+
+function goBack() {
+  document.getElementById('moduleSelect').style.display = 'grid';
+  document.querySelectorAll('.tab-container').forEach(el => el.style.display = 'none');
+}
+
+function showModule(m) {
+  document.getElementById('moduleSelect').style.display = 'none';
+  document.querySelectorAll('.tab-container').forEach(el => el.style.display = 'none');
+
+  if (m === 'challenge') {
+    document.getElementById('challengeModule').style.display = 'block';
+    renderUnits();
+  } else if (m === 'speak') {
+    document.getElementById('speakModule').style.display = 'block';
+    renderSpeakUnits();
+  } else if (m === 'wrongbook') {
+    document.getElementById('wrongbookModule').style.display = 'block';
+    loadWrongbook();
+  }
+}
+
+// ==================== 闯关训练功能 ====================
+function setGrade(g) {
+  currentGrade = g;
+  // 使用更精确的选择器：获取challengeModule下第一个.tabs容器内的所有.tab按钮
+  const tabs = document.querySelectorAll('#challengeModule > .tabs')[0]?.querySelectorAll('.tab');
+  if (tabs) {
+    tabs.forEach((el, i) => {
+      el.classList.toggle('active', i === g - 1);
+    });
+  }
+  renderUnits();
+}
+
+function setSubject(s) {
+  currentSubject = s;
+  const names = {yuwen: '语文', shuxue: '数学', yingyu: '英语'};
+  // 获取challengeModule下第二个.tabs容器（科目切换）内的所有.tab按钮
+  const tabContainers = document.querySelectorAll('#challengeModule > .tabs');
+  if (tabContainers.length >= 2) {
+    const subjectTabs = tabContainers[1].querySelectorAll('.tab');
+    subjectTabs.forEach((el) => {
+      el.classList.toggle('active', el.textContent === names[s]);
+    });
+  }
+  renderUnits();
+}
+
+function setSemester(s) {
+  currentSemester = s;
+  const semesterTabs = document.querySelectorAll('#challengeModule .semester-tabs .semester-btn');
+  semesterTabs.forEach((el, i) => {
+    el.classList.toggle('active', i === s - 1);
+  });
+  renderUnits();
+}
+
+function renderUnits() {
+  const grid = document.getElementById('unitGrid');
+  const units = textbookStructure[currentGrade][currentSubject][currentSemester];
+
+  grid.innerHTML = units.map((u, i) => `
+    <div class="unit-card ${currentUnit === i + 1 ? 'active' : ''}" onclick="selectUnit(${i + 1})">
+      <div style="font-size: 24px; margin-bottom: 8px;">📖</div>
+      <div style="font-weight: 600;">Unit ${i + 1}</div>
+      <div style="font-size: 12px; margin-top: 4px; opacity: 0.8;">${u.substring(0, 8)}${u.length > 8 ? '...' : ''}</div>
+    </div>
+  `).join('');
+
+  selectUnit(1);
+}
+
+function selectUnit(u) {
+  currentUnit = u;
+  document.querySelectorAll('#unitGrid .unit-card').forEach((el, i) => {
+    el.classList.toggle('active', i === u - 1);
+  });
+
+  const unitName = textbookStructure[currentGrade][currentSubject][currentSemester][u - 1];
+  const subjectNames = {yuwen: '语文', shuxue: '数学', yingyu: '英语'};
+
+  document.getElementById('challengeInfo').style.display = 'block';
+  document.getElementById('challengeTitle').textContent = 
+    `${currentGrade}年级${subjectNames[currentSubject]}${currentSemester === 1 ? '上学期' : '下学期'} - ${unitName}`;
+
+  const count = detailedQuestionBank[currentGrade]?.[currentSubject]?.[currentSemester]?.[u]?.length || 10;
+  document.getElementById('bankCount').textContent = count + '+';
+}
+
+function refreshBank() {
+  startChallenge();
+}
+
+function startChallenge() {
+  const allQuestions = detailedQuestionBank[currentGrade][currentSubject][currentSemester][currentUnit];
+  if (!allQuestions || allQuestions.length === 0) {
+    alert('该单元题目正在准备中！');
+    return;
+  }
+
+  currentQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 10);
+  currentQuestionIndex = 0;
+  currentScore = 0;
+  wrongAnswers = [];
+
+  showQuestion();
+  document.getElementById('quizModal').classList.add('show');
+}
+
+function showQuestion() {
+  const q = currentQuestions[currentQuestionIndex];
+  document.getElementById('quizContainer').innerHTML = `
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; color: #6B7280;">
+      <span>第 ${currentQuestionIndex + 1} / ${currentQuestions.length} 题</span>
+      <span>得分: ${currentScore}</span>
+    </div>
+    <div class="question-box">
+      <div class="question-title">${q.q}</div>
+      <div class="options">
+        ${q.options.map((opt, i) => `
+          <div class="option" onclick="selectAnswer(${i})" data-idx="${i}">
+            <div class="option-label">${String.fromCharCode(65 + i)}</div>
+            <div>${opt}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">下一题</button>
+    </div>
+  `;
+}
+
+function selectAnswer(idx) {
+  const q = currentQuestions[currentQuestionIndex];
+  document.querySelectorAll('.option').forEach((opt, i) => {
+    opt.style.pointerEvents = 'none';
+    if (i === q.answer) opt.classList.add('correct');
+    else if (i === idx) opt.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  if (idx === q.answer) {
+    currentScore += 5;
+    fb.className = 'feedback correct show';
+    fb.innerHTML = `<strong>✓ 正确！</strong><br>${q.analysis}`;
+  } else {
+    fb.className = 'feedback wrong show';
+    fb.innerHTML = `<strong>✗ 错误！</strong><br>正确答案是：${q.options[q.answer]}<br>${q.analysis}`;
+    wrongAnswers.push({
+      question: q.q, userAnswer: q.options[idx], correctAnswer: q.options[q.answer],
+      analysis: q.analysis, subject: currentSubject, grade: currentGrade,
+      semester: currentSemester, unit: currentUnit, time: new Date().toLocaleString()
+    });
+  }
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < currentQuestions.length) {
+    showQuestion();
+  } else {
+    finishChallenge();
+  }
+}
+
+function finishChallenge() {
+  document.getElementById('quizModal').classList.remove('show');
+
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  if (!users[currentUser].wrongbook) users[currentUser].wrongbook = [];
+  users[currentUser].wrongbook.unshift(...wrongAnswers);
+  if (!users[currentUser].challengeRecords) users[currentUser].challengeRecords = [];
+  users[currentUser].challengeRecords.push({ grade: currentGrade, subject: currentSubject, semester: currentSemester, unit: currentUnit, score: currentScore, time: new Date().toLocaleString() });
+  localStorage.setItem('users', JSON.stringify(users));
+
+  document.getElementById('finalScore').textContent = currentScore;
+  document.getElementById('correctCount').textContent = currentQuestions.length - wrongAnswers.length;
+  document.getElementById('wrongCount').textContent = wrongAnswers.length;
+  document.getElementById('accuracyRate').textContent = Math.round((currentScore / (currentQuestions.length * 5)) * 100) + '%';
+  document.getElementById('resultModal').classList.add('show');
+  updateStats();
+}
+
+function closeQuiz() { document.getElementById('quizModal').classList.remove('show'); }
+function closeResult() { document.getElementById('resultModal').classList.remove('show'); }
+
+// ==================== 英语跟读功能 ====================
+function setSpeakGrade(g) {
+  speakGrade = g;
+  // 使用更精确的选择器：获取speakModule下第一个.tabs容器内的所有.tab按钮
+  const tabs = document.querySelectorAll('#speakModule > .tabs')[0]?.querySelectorAll('.tab');
+  if (tabs) {
+    tabs.forEach((el, i) => {
+      el.classList.toggle('active', i === g - 1);
+    });
+  }
+  renderSpeakUnits();
+}
+
+function setSpeakSemester(s) {
+  speakSemester = s;
+  const semesterTabs = document.querySelectorAll('#speakModule .semester-tabs .semester-btn');
+  semesterTabs.forEach((el, i) => {
+    el.classList.toggle('active', i === s - 1);
+  });
+  renderSpeakUnits();
+}
+
+function setSpeakMode(mode) {
+  speakMode = mode;
+  document.querySelectorAll('.speak-mode-btn').forEach((el, i) => {
+    el.classList.toggle('active', (mode === 'word' && i === 0) || (mode === 'sentence' && i === 1));
+  });
+  currentWordIndex = 0;
+  currentSentenceIndex = 0;
+  if (document.getElementById('speakPractice').style.display !== 'none') {
+    loadSpeakContent();
+  }
+}
+
+function renderSpeakUnits() {
+  const grid = document.getElementById('speakUnitGrid');
+  const units = textbookStructure[speakGrade]['yingyu'][speakSemester];
+
+  grid.innerHTML = units.map((u, i) => `
+    <div class="unit-card ${speakUnit === i + 1 ? 'active' : ''}" onclick="selectSpeakUnit(${i + 1})">
+      <div style="font-size: 24px; margin-bottom: 8px;">${speakMode === 'word' ? '🔤' : '💬'}</div>
+      <div style="font-weight: 600;">Unit ${i + 1}</div>
+      <div style="font-size: 11px; margin-top: 4px; opacity: 0.8;">${u.substring(0, 12)}${u.length > 12 ? '...' : ''}</div>
+    </div>
+  `).join('');
+
+  selectSpeakUnit(1);
+}
+
+function selectSpeakUnit(u) {
+  speakUnit = u;
+  document.querySelectorAll('#speakUnitGrid .unit-card').forEach((el, i) => {
+    el.classList.toggle('active', i === u - 1);
+  });
+  document.getElementById('speakPractice').style.display = 'block';
+  currentWordIndex = 0;
+  currentSentenceIndex = 0;
+  loadSpeakContent();
+}
+
+function loadSpeakContent() {
+  if (speakMode === 'word') {
+    const words = englishWordBank[speakGrade]?.[speakSemester]?.[speakUnit] || [];
+    if (words.length === 0) { alert('该单元单词正在准备中！'); return; }
+    const word = words[currentWordIndex];
+    document.getElementById('progressLabel').textContent = '单词进度';
+    document.getElementById('wordProgress').textContent = `${currentWordIndex + 1} / ${words.length}`;
+    document.getElementById('progressFill').style.width = `${((currentWordIndex + 1) / words.length) * 100}%`;
+    document.getElementById('speakText').textContent = word.word;
+    document.getElementById('speakPhonetic').textContent = word.phonetic;
+    document.getElementById('speakMeaning').innerHTML = `${word.meaning}<br><small style="opacity:0.8">${word.example}</small>`;
+  } else {
+    const sentences = englishSentenceBank[speakGrade]?.[speakSemester]?.[speakUnit] || [];
+    if (sentences.length === 0) { alert('该单元句子正在准备中！'); return; }
+    const sent = sentences[currentSentenceIndex];
+    document.getElementById('progressLabel').textContent = '句子进度';
+    document.getElementById('wordProgress').textContent = `${currentSentenceIndex + 1} / ${sentences.length}`;
+    document.getElementById('progressFill').style.width = `${((currentSentenceIndex + 1) / sentences.length) * 100}%`;
+    document.getElementById('speakText').textContent = sent.sentence;
+    document.getElementById('speakPhonetic').textContent = sent.phonetic;
+    document.getElementById('speakMeaning').textContent = sent.meaning;
+  }
+  document.querySelectorAll('.star').forEach(star => star.classList.remove('active'));
+  document.getElementById('ratingText').textContent = '点击录音按钮开始跟读';
+}
+
+function playSpeak() {
+  let text = '';
+  if (speakMode === 'word') {
+    const words = englishWordBank[speakGrade]?.[speakSemester]?.[speakUnit] || [];
+    text = words[currentWordIndex]?.word || '';
+  } else {
+    const sentences = englishSentenceBank[speakGrade]?.[speakSemester]?.[speakUnit] || [];
+    text = sentences[currentSentenceIndex]?.sentence || '';
+  }
+  if (text) {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    speechSynthesis.speak(u);
+  }
+}
+
+function toggleRecord() {
+  if (!recognition) { alert('您的浏览器不支持语音识别，请使用 Chrome'); return; }
+  const btn = document.getElementById('recordBtn');
+  if (isRecording) {
+    recognition.stop();
+    stopRecording();
+  } else {
+    recognition.start();
+    isRecording = true;
+    btn.classList.add('recording');
+    document.getElementById('ratingText').textContent = '正在录音，请朗读...';
+  }
+}
+
+function stopRecording() {
+  isRecording = false;
+  document.getElementById('recordBtn').classList.remove('recording');
+}
+
+function evaluateSpeech(transcript) {
+  let target = '';
+  if (speakMode === 'word') {
+    const words = englishWordBank[speakGrade]?.[speakSemester]?.[speakUnit] || [];
+    target = words[currentWordIndex]?.word.toLowerCase() || '';
+  } else {
+    const sentences = englishSentenceBank[speakGrade]?.[speakSemester]?.[speakUnit] || [];
+    target = sentences[currentSentenceIndex]?.sentence.toLowerCase().replace(/[.,?!]/g, '') || '';
+  }
+
+  const spoken = transcript.toLowerCase().trim();
+  let match = 0;
+  const maxLen = Math.max(target.length, spoken.length);
+  for (let i = 0; i < Math.min(target.length, spoken.length); i++) {
+    if (target[i] === spoken[i]) match++;
+  }
+  const similarity = match / maxLen;
+
+  let stars = similarity > 0.8 ? 3 : similarity > 0.5 ? 2 : similarity > 0.2 ? 1 : 0;
+  document.querySelectorAll('.star').forEach((star, i) => { if (i < stars) star.classList.add('active'); });
+  const texts = ['继续加油！', '发音不错！', '发音优秀！'];
+  document.getElementById('ratingText').textContent = texts[stars - 1] || '继续加油！';
+
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  if (!users[currentUser].speakRecords) users[currentUser].speakRecords = [];
+  users[currentUser].speakRecords.push({ type: speakMode, accuracy: Math.round(similarity * 100), stars: stars, time: new Date().toLocaleString() });
+  localStorage.setItem('users', JSON.stringify(users));
+  updateStats();
+}
+
+function nextSpeak() {
+  if (speakMode === 'word') {
+    const words = englishWordBank[speakGrade]?.[speakSemester]?.[speakUnit] || [];
+    currentWordIndex = (currentWordIndex + 1) % words.length;
+  } else {
+    const sentences = englishSentenceBank[speakGrade]?.[speakSemester]?.[speakUnit] || [];
+    currentSentenceIndex = (currentSentenceIndex + 1) % sentences.length;
+  }
+  loadSpeakContent();
+}
+
+// ==================== 错题本功能 ====================
+function loadWrongbook(filter = 'all') {
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  const wrongbook = users[currentUser]?.wrongbook || [];
+  const filtered = filter === 'all' ? wrongbook : wrongbook.filter(w => w.subject === filter);
+  const list = document.getElementById('wrongList');
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state">暂无错题，继续保持！🎉</div>';
+    return;
+  }
+
+  const subjectNames = {yuwen: '语文', shuxue: '数学', yingyu: '英语'};
+  const semesterNames = {1: '上', 2: '下'};
+
+  list.innerHTML = filtered.slice(0, 20).map(w => `
+    <div class="wrong-item">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+        <div>
+          <span style="background: var(--primary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${subjectNames[w.subject]}</span>
+          <span style="font-size: 12px; color: #6B7280; margin-left: 8px;">${w.grade}年级${semesterNames[w.semester]}学期 Unit${w.unit}</span>
+        </div>
+        <div style="font-size: 12px; color: #6B7280;">${w.time}</div>
+      </div>
+      <div style="font-weight: 600; margin-bottom: 12px;">${w.question}</div>
+      <div style="background: white; padding: 12px; border-radius: 8px; font-size: 14px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span>你的答案：</span><span style="color: var(--danger); font-weight: 600;">${w.userAnswer}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>正确答案：</span><span style="color: var(--success); font-weight: 600;">${w.correctAnswer}</span>
+        </div>
+        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #E5E7EB; color: #6B7280;">${w.analysis}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterWrong(f) {
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  loadWrongbook(f);
+}
+
+function updateStats() {
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  const user = users[currentUser] || { wrongbook: [], speakRecords: [], challengeRecords: [] };
+
+  document.getElementById('statWrong').textContent = user.wrongbook?.length || 0;
+  document.getElementById('statSpeak').textContent = user.speakRecords?.length || 0;
+  document.getElementById('statChallenge').textContent = user.challengeRecords?.length || 0;
+
+  let stars = user.challengeRecords?.reduce((a, b) => a + Math.floor(b.score / 15), 0) || 0;
+  document.getElementById('statStars').textContent = stars;
+
+  if (user.speakRecords?.length > 0) {
+    const avg = Math.round(user.speakRecords.reduce((a, b) => a + b.accuracy, 0) / user.speakRecords.length);
+    document.getElementById('statAccuracy').textContent = avg + '%';
+  }
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
+
+
+
